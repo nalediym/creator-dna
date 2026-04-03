@@ -35,16 +35,23 @@ export default function ReportPage() {
   const router = useRouter();
 
   useEffect(() => {
+    // Try sessionStorage first (from live upload flow)
     const stored = sessionStorage.getItem("creator-dna-report");
-    if (!stored) {
-      router.push("/");
-      return;
+    if (stored) {
+      try {
+        setReport(JSON.parse(stored));
+        return;
+      } catch { /* fall through */ }
     }
-    try {
-      setReport(JSON.parse(stored));
-    } catch {
-      router.push("/");
-    }
+
+    // Fallback: load pre-generated sample report (from CLI)
+    fetch("/sample-report.json")
+      .then((res) => {
+        if (!res.ok) throw new Error("No sample report");
+        return res.json();
+      })
+      .then(setReport)
+      .catch(() => router.push("/"));
   }, [router]);
 
   if (!report) {

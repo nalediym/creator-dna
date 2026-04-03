@@ -1,0 +1,630 @@
+{
+  "niches": {
+    "niches": [
+      {
+        "name": "4C natural hair treatment testing + occasion styling",
+        "confidence": 95,
+        "evidence": [
+          "Highest-specificity search cluster centers on Cécred: \"cecred\" (8), \"cecred tutorial\" (4), and multiple follow-up searches on heat application, hair growth, bad results, keratin, and step-by-step usage",
+          "Hair searches extend beyond product curiosity into use-case styling: \"natural hair wedding guest,\" \"4c wedding hairstyles,\" \"stretch hair 4c,\" and \"afro night before\"",
+          "They follow 19 hair-care creators, and the overall high favorite-to-like ratio suggests save-worthy tutorial behavior rather than passive viewing"
+        ]
+      },
+      {
+        "name": "Arab bakhoor/oud fragrance culture + scent layering + local shopping",
+        "confidence": 90,
+        "evidence": [
+          "Very concentrated fragrance search behavior: \"amber bakhoor\" (4), \"vanilla bakhoor\" (4), \"yemeni bakhoor\" (4), plus \"oud,\" \"oud perfume,\" and \"best oud bakhoor perfume combo\"",
+          "Searches combine product discovery with acquisition intent: \"fragrance store arab nyc\" (4) and \"fragrance tiktok\"",
+          "This is more specific than generic beauty interest because it sits at the intersection of Middle Eastern scent culture, layering, and shopping behavior"
+        ]
+      },
+      {
+        "name": "Beyoncé-adjacent haircare + Black celebrity beauty product commentary",
+        "confidence": 68,
+        "evidence": [
+          "Cécred searches overlap directly with celebrity-driven interest: \"cecred kelly rowland\" (2), plus broader searches like \"beyonce responds to nicki minaj on x\" (3)",
+          "Followed creators include multiple Beyoncé-focused accounts under the large \"other\" bucket, suggesting fandom and celebrity-context consumption rather than isolated product research",
+          "The pattern points to interest in testing celebrity beauty launches and discussing whether they actually work on textured hair"
+        ]
+      },
+      {
+        "name": "Thailand wellness curiosity + shopping culture + gender/beauty exploration",
+        "confidence": 56,
+        "evidence": [
+          "Distinct Thailand cluster in a tight time window: \"thai medicine\" (6), \"thai medicine weight loss\" (4), \"thailand shopping\" (4), and \"ladyboy\" (4)",
+          "The searches span wellness claims, consumer culture, and gendered beauty/cultural curiosity rather than a single one-off topic",
+          "This intersection is specific, but confidence is lower because creator-follow data does not reinforce it as strongly as hair and fragrance"
+        ]
+      }
+    ]
+  },
+  "qualification": {
+    "qualifications": [
+      {
+        "niche": "4C natural hair treatment testing + occasion styling",
+        "narrative": "Your data reads like someone who studies 4C hair, not someone who just likes pretty results. You have watched 22,429 videos overall, liked 6,000, favorited 3,585, followed 2,349 accounts, and made 1,311 searches. Then the niche-specific pattern gets even clearer: you searched cecred 8 times, cecred tutorial 4 times, and how to apply heat with cecred deep conditioner 4 times. That is technique research. That is product testing curiosity. That is somebody trying to understand what actually works on real hair, not just what looks good in a 20-second clip. Most creators posting in this space have not done that much homework before they ever hit record. You already have the research base to talk about treatments, styling decisions, and what is worth trying versus what is just marketed well.",
+        "stats": [
+          "22,429 total videos watched",
+          "6,000 videos liked and 3,585 favorited",
+          "1,311 total searches and 2,349 accounts followed",
+          "Cecred searched 8x; cecred tutorial 4x; how to apply heat with cecred deep conditioner 4x"
+        ]
+      },
+      {
+        "niche": "Arab bakhoor/oud fragrance culture + scent layering + local shopping",
+        "narrative": "This does not look like surface-level fragrance interest. It looks like you went looking for culture, product differences, and where to actually buy the real thing. Out of 1,311 searches, you specifically looked up amber bakhoor 4 times, vanilla bakhoor 4 times, yemeni bakhoor 4 times, fragrance store arab nyc 4 times, and oud 2 times. Pair that with 22,429 videos watched, 6,000 likes, 3,585 favorites, and 2,349 accounts followed, and the pattern is obvious: you have spent real time learning vocabulary, scent families, and shopping behavior inside this niche. Most people who want to make fragrance content have not done this much research on bakhoor and oud before posting. You already know enough to explain the difference between curiosity and actual taste, and that is exactly what makes content credible.",
+        "stats": [
+          "1,311 total searches",
+          "Amber bakhoor 4x; vanilla bakhoor 4x; yemeni bakhoor 4x; oud 2x",
+          "Fragrance store arab nyc searched 4x",
+          "22,429 watched; 6,000 liked; 3,585 favorited; 2,349 followed"
+        ]
+      },
+      {
+        "niche": "Beyonce-adjacent haircare + Black celebrity beauty product commentary",
+        "narrative": "You are more qualified for this niche than you probably think because your behavior shows you do not stop at celebrity hype. You searched cecred 8 times, cecred tutorial 4 times, and how to apply heat with cecred deep conditioner 4 times, which means you were not just watching launch buzz, you were checking usage, technique, and whether the product holds up in practice. You also searched beyonce responds to nicki minaj on x 3 times, which shows you track the surrounding conversation too. With 22,429 total videos watched, 6,000 likes, 3,585 favorites, 1,311 searches, and 2,349 accounts followed, you have already done more audience-side research than a lot of people doing celebrity beauty commentary on camera. Most creators react. You investigate. That difference matters.",
+        "stats": [
+          "Cecred searched 8x",
+          "Cecred tutorial 4x; how to apply heat with cecred deep conditioner 4x",
+          "Beyonce responds to nicki minaj on x searched 3x",
+          "22,429 watched; 6,000 liked; 3,585 favorited; 1,311 searched; 2,349 followed"
+        ]
+      },
+      {
+        "niche": "Thailand wellness curiosity + shopping culture + gender/beauty exploration",
+        "narrative": "This niche stands out because your searches show specific curiosity, not random fascination. You searched thai medicine 6 times, thai medicine weight loss 4 times, thailand shopping 4 times, and ladyboy 4 times. That means you were not just consuming travel aesthetics. You were trying to understand products, wellness claims, shopping culture, and how beauty and gender presentation show up in that world. Across 22,429 videos watched, 6,000 likes, 3,585 favorites, 1,311 searches, and 2,349 followed accounts, you have already built a stronger observation base than most first-time creators who post about Thailand from a distance. Most people in this lane repeat obvious takes. You have enough pattern recognition to notice what is interesting, what feels misunderstood, and what viewers actually want explained.",
+        "stats": [
+          "Thai medicine searched 6x",
+          "Thai medicine weight loss 4x; thailand shopping 4x; ladyboy 4x",
+          "1,311 total searches",
+          "22,429 watched; 6,000 liked; 3,585 favorited; 2,349 followed"
+        ]
+      }
+    ]
+  },
+  "contentIdeas": {
+    "ideas": [
+      {
+        "title": "The Cécred + Oud Wash-Day Rule",
+        "hook": "If you have 4C hair and you love oud, the biggest Cécred wash-day mistake is making your deep conditioner fight your fragrance before you even leave the house.",
+        "format": "Talking-to-camera hot take, 45-60 seconds",
+        "niche": "4C natural hair testing x Cécred/Beyoncé-adjacent commentary x oud layering"
+      },
+      {
+        "title": "Heat vs No Heat With Cécred for a Bakhoor Night",
+        "hook": "I used Cécred deep conditioner with heat on one side of my 4C hair and no heat on the other, and the real winner was the side that still worked with amber bakhoor by the end of the night.",
+        "format": "Split-screen mini experiment with quick reveal, 60-90 seconds",
+        "niche": "4C treatment testing x Cécred tutorial search intent x bakhoor styling"
+      },
+      {
+        "title": "Arab Fragrance Store NYC Meets 4C Occasion Hair",
+        "hook": "I’m going to an Arab fragrance store in NYC to find the exact vanilla-and-oud combo that still works with a fresh 4C occasion style instead of overpowering it.",
+        "format": "Errand vlog plus mirror reveal, 90-120 seconds",
+        "niche": "Local fragrance shopping x scent layering x 4C occasion styling"
+      },
+      {
+        "title": "Beyoncé Sold Me Cécred, Yemeni Bakhoor Tested It",
+        "hook": "Beyoncé may have sold me on Cécred, but Yemeni bakhoor is what exposed whether this routine actually leaves 4C hair polished enough for a real event.",
+        "format": "Commentary plus styled demo and close-up results, 90-120 seconds",
+        "niche": "Beyoncé-adjacent beauty commentary x Cécred testing x bakhoor culture"
+      },
+      {
+        "title": "Thai Beauty Curiosity vs 4C Scalp Reality",
+        "hook": "I went down a Thai medicine and ylang-ylang rabbit hole for my scalp, and here’s what actually makes sense for 4C hair before a Cécred style day and what absolutely does not.",
+        "format": "Voiceover explainer with product shots and on-screen myths vs facts, 2-3 minutes",
+        "niche": "Thailand wellness curiosity x 4C hair treatment testing x Cécred routine analysis"
+      },
+      {
+        "title": "If Cécred Had a Bakhoor",
+        "hook": "If Cécred ever made a bakhoor, this is the amber-vanilla-oud layering combo I think Beyoncé’s wash day would smell like on actual 4C hair.",
+        "format": "Creative scent-layering concept video with hair closeups, 60-90 seconds",
+        "niche": "Beyoncé-adjacent beauty fantasy x bakhoor layering x 4C hair aesthetic"
+      },
+      {
+        "title": "Thailand Shopping Rules, NYC Beauty Haul",
+        "hook": "I used the way people shop beauty in Thailand to build a New York haul with one Arab fragrance-store find, one ylang-ylang oil, and one Cécred product that actually belong in the same routine.",
+        "format": "Shopping framework explainer plus haul table shot, 2-3 minutes",
+        "niche": "Thailand shopping culture x local Arab beauty shopping x Cécred/4C routine building"
+      },
+      {
+        "title": "Bretman Energy, Soft Glam Oud Night",
+        "hook": "Bretman Rock made me stop treating beauty like it has to pick one lane, so I built a soft-glam 4C look that wears like celebrity haircare commentary and smells like vanilla bakhoor after dark.",
+        "format": "Get-ready-with-me with commentary and final outfit reveal, 2-3 minutes",
+        "niche": "Gender and beauty exploration x celebrity beauty influence x 4C styling x bakhoor layering"
+      },
+      {
+        "title": "Cécred, Keratin, and the 4C Panic Spiral",
+        "hook": "Before you let the internet scare you with Cécred bad results and keratin talk, here’s the difference between a smoothing fantasy and what 4C hair actually needs for healthy occasion styling.",
+        "format": "Direct-to-camera myth-busting with insert screenshots and demo strands, 2-4 minutes",
+        "niche": "4C treatment skepticism x Cécred celebrity product commentary x occasion styling education"
+      },
+      {
+        "title": "One Night Out, Three Beauty Worlds",
+        "hook": "I’m building one full night-out look using a Cécred prep, a Thai-inspired wellness step, and an oud purchase from an Arab fragrance store in NYC because nobody is making beauty content for this exact overlap.",
+        "format": "Multi-stop mini documentary with shopping, styling, and scent-layer reveal, 3-5 minutes",
+        "niche": "4C hair styling x Thailand beauty curiosity x Arab fragrance shopping x celebrity beauty commentary"
+      }
+    ]
+  },
+  "schedule": {
+    "bestHours": [
+      3,
+      4,
+      21
+    ],
+    "bestDays": [
+      "Wednesday",
+      "Friday",
+      "Monday"
+    ],
+    "rationale": "Your peak consumption is Wednesday, Friday, Monday, around 3am, 4am, 9pm. 21% of your watching happens in these windows. Your demographic likely shares your rhythm. Post 2-3 hours before these peaks for maximum reach."
+  },
+  "summary": {
+    "searchClusters": [
+      {
+        "term": "cecred",
+        "count": 8,
+        "firstSeen": "2025-10-17 18:24:25",
+        "lastSeen": "2025-10-17 19:56:51"
+      },
+      {
+        "term": "thai medicine",
+        "count": 6,
+        "firstSeen": "2026-02-12 21:00:17",
+        "lastSeen": "2026-02-12 22:00:01"
+      },
+      {
+        "term": "cecred tutorial",
+        "count": 4,
+        "firstSeen": "2025-10-17 18:24:41",
+        "lastSeen": "2025-10-17 18:25:47"
+      },
+      {
+        "term": "how to apply heat with cecred deep conditioner",
+        "count": 4,
+        "firstSeen": "2025-10-17 18:47:34",
+        "lastSeen": "2025-10-17 19:28:57"
+      },
+      {
+        "term": "amber bakhoor",
+        "count": 4,
+        "firstSeen": "2025-10-24 22:48:39",
+        "lastSeen": "2025-10-24 23:27:57"
+      },
+      {
+        "term": "ylang ylang oil",
+        "count": 4,
+        "firstSeen": "2025-10-24 23:00:03",
+        "lastSeen": "2025-10-24 23:27:18"
+      },
+      {
+        "term": "vanilla bakhoor",
+        "count": 4,
+        "firstSeen": "2025-11-02 21:32:45",
+        "lastSeen": "2025-11-05 22:38:12"
+      },
+      {
+        "term": "yemeni bakhoor",
+        "count": 4,
+        "firstSeen": "2025-11-05 23:21:59",
+        "lastSeen": "2025-11-05 23:24:47"
+      },
+      {
+        "term": "fragrance store arab nyc",
+        "count": 4,
+        "firstSeen": "2026-01-24 18:35:47",
+        "lastSeen": "2026-01-24 19:06:03"
+      },
+      {
+        "term": "thai medicine weight loss",
+        "count": 4,
+        "firstSeen": "2026-02-12 21:18:51",
+        "lastSeen": "2026-02-12 21:54:07"
+      },
+      {
+        "term": "ladyboy",
+        "count": 4,
+        "firstSeen": "2026-02-12 22:02:32",
+        "lastSeen": "2026-02-12 22:02:38"
+      },
+      {
+        "term": "thailand shopping",
+        "count": 4,
+        "firstSeen": "2026-02-12 22:38:30",
+        "lastSeen": "2026-02-12 22:43:17"
+      },
+      {
+        "term": "bretmanrock",
+        "count": 4,
+        "firstSeen": "2026-03-24 04:09:46",
+        "lastSeen": "2026-03-26 21:26:52"
+      },
+      {
+        "term": "anhar beauty makeup tutorial",
+        "count": 3,
+        "firstSeen": "2026-03-28 13:07:51",
+        "lastSeen": "2026-03-28 15:11:23"
+      },
+      {
+        "term": "cotton crepe fabric",
+        "count": 3,
+        "firstSeen": "2026-03-18 22:45:10",
+        "lastSeen": "2026-03-25 14:52:45"
+      },
+      {
+        "term": "verka serduchka",
+        "count": 3,
+        "firstSeen": "2026-03-20 19:39:50",
+        "lastSeen": "2026-03-20 20:15:53"
+      },
+      {
+        "term": "kayla nicole",
+        "count": 3,
+        "firstSeen": "2025-10-10 15:45:54",
+        "lastSeen": "2025-11-12 04:57:29"
+      },
+      {
+        "term": "hilaria baldwin shake it to the max",
+        "count": 3,
+        "firstSeen": "2025-10-14 09:55:06",
+        "lastSeen": "2025-10-15 01:48:56"
+      },
+      {
+        "term": "beyonce responds to nicki minaj on x",
+        "count": 3,
+        "firstSeen": "2025-10-09 15:34:20",
+        "lastSeen": "2025-10-14 11:11:23"
+      },
+      {
+        "term": "oud",
+        "count": 2,
+        "firstSeen": "2025-10-06 00:32:27",
+        "lastSeen": "2025-10-06 00:32:29"
+      },
+      {
+        "term": "oud perfume",
+        "count": 2,
+        "firstSeen": "2025-10-06 00:32:38",
+        "lastSeen": "2025-10-06 00:32:39"
+      },
+      {
+        "term": "oud bakhoor maison d'orient",
+        "count": 2,
+        "firstSeen": "2025-10-06 00:33:02",
+        "lastSeen": "2025-10-06 00:33:04"
+      },
+      {
+        "term": "best oud bakhoor perfume combo",
+        "count": 2,
+        "firstSeen": "2025-10-06 00:39:28",
+        "lastSeen": "2025-10-06 00:39:30"
+      },
+      {
+        "term": "cécred hair growth before and after",
+        "count": 2,
+        "firstSeen": "2025-10-17 18:28:54",
+        "lastSeen": "2025-10-17 18:28:55"
+      },
+      {
+        "term": "cécred hair growth",
+        "count": 2,
+        "firstSeen": "2025-10-17 18:38:11",
+        "lastSeen": "2025-10-17 18:38:12"
+      },
+      {
+        "term": "cecred hair tutorial",
+        "count": 2,
+        "firstSeen": "2025-10-17 19:35:02",
+        "lastSeen": "2025-10-17 19:35:03"
+      },
+      {
+        "term": "keratin treatment",
+        "count": 2,
+        "firstSeen": "2025-10-17 19:43:43",
+        "lastSeen": "2025-10-17 19:43:44"
+      },
+      {
+        "term": "keratin treatment explained",
+        "count": 2,
+        "firstSeen": "2025-10-17 19:44:05",
+        "lastSeen": "2025-10-17 19:44:06"
+      },
+      {
+        "term": "cecred bad results",
+        "count": 2,
+        "firstSeen": "2025-10-17 19:48:37",
+        "lastSeen": "2025-10-17 19:48:38"
+      },
+      {
+        "term": "cecred keratin",
+        "count": 2,
+        "firstSeen": "2025-10-17 19:49:22",
+        "lastSeen": "2025-10-17 19:49:23"
+      },
+      {
+        "term": "cecred keratin no heat",
+        "count": 2,
+        "firstSeen": "2025-10-17 19:50:41",
+        "lastSeen": "2025-10-17 19:50:42"
+      },
+      {
+        "term": "cecred kelly rowland",
+        "count": 2,
+        "firstSeen": "2025-10-17 19:55:13",
+        "lastSeen": "2025-10-17 19:55:15"
+      },
+      {
+        "term": "cécred step by step",
+        "count": 2,
+        "firstSeen": "2025-10-17 19:56:59",
+        "lastSeen": "2025-10-17 19:57:01"
+      },
+      {
+        "term": "natural hair wedding guest",
+        "count": 2,
+        "firstSeen": "2025-10-17 20:00:05",
+        "lastSeen": "2025-10-17 20:00:06"
+      },
+      {
+        "term": "4c wedding hairstyles",
+        "count": 2,
+        "firstSeen": "2025-10-17 20:06:15",
+        "lastSeen": "2025-10-17 20:06:17"
+      },
+      {
+        "term": "stretch hair",
+        "count": 2,
+        "firstSeen": "2025-10-17 20:07:19",
+        "lastSeen": "2025-10-17 20:07:20"
+      },
+      {
+        "term": "stretch hair 4c",
+        "count": 2,
+        "firstSeen": "2025-10-17 20:07:24",
+        "lastSeen": "2025-10-17 20:07:25"
+      },
+      {
+        "term": "afro night before",
+        "count": 2,
+        "firstSeen": "2025-10-17 20:11:20",
+        "lastSeen": "2025-10-17 20:11:22"
+      },
+      {
+        "term": "the perfect neighbor",
+        "count": 2,
+        "firstSeen": "2025-10-24 18:57:06",
+        "lastSeen": "2025-10-24 18:57:07"
+      },
+      {
+        "term": "fragrance tiktok",
+        "count": 2,
+        "firstSeen": "2025-10-24 21:41:51",
+        "lastSeen": "2025-10-24 21:41:52"
+      },
+      {
+        "term": "fragrance tiktok bakhoor",
+        "count": 2,
+        "firstSeen": "2025-10-24 21:45:33",
+        "lastSeen": "2025-10-24 21:45:35"
+      },
+      {
+        "term": "bakhoor laundry scent",
+        "count": 2,
+        "firstSeen": "2025-10-24 21:46:44",
+        "lastSeen": "2025-10-24 21:46:45"
+      },
+      {
+        "term": "worst bakhoor",
+        "count": 2,
+        "firstSeen": "2025-10-24 21:48:36",
+        "lastSeen": "2025-10-24 21:48:37"
+      },
+      {
+        "term": "amazon bakhoor reviews",
+        "count": 2,
+        "firstSeen": "2025-10-24 21:48:56",
+        "lastSeen": "2025-10-24 21:48:58"
+      },
+      {
+        "term": "safa oud sandalé oil review",
+        "count": 2,
+        "firstSeen": "2025-10-24 22:20:48",
+        "lastSeen": "2025-10-24 22:20:49"
+      },
+      {
+        "term": "safa vanillé oil!",
+        "count": 2,
+        "firstSeen": "2025-10-24 22:24:10",
+        "lastSeen": "2025-10-24 22:24:11"
+      },
+      {
+        "term": "safa vanilla oil review",
+        "count": 2,
+        "firstSeen": "2025-10-24 22:24:17",
+        "lastSeen": "2025-10-24 22:24:18"
+      },
+      {
+        "term": "amber musk perfume oil",
+        "count": 2,
+        "firstSeen": "2025-10-24 22:35:48",
+        "lastSeen": "2025-10-24 22:35:50"
+      },
+      {
+        "term": "amber musk essential oil",
+        "count": 2,
+        "firstSeen": "2025-10-24 22:39:05",
+        "lastSeen": "2025-10-24 22:39:07"
+      },
+      {
+        "term": "diy amber musk",
+        "count": 2,
+        "firstSeen": "2025-10-24 22:43:04",
+        "lastSeen": "2025-10-24 22:43:05"
+      }
+    ],
+    "stats": {
+      "videosWatched": 22429,
+      "videosLiked": 6000,
+      "videosFavorited": 3585,
+      "videosShared": 941,
+      "searchesCount": 1311,
+      "accountsFollowed": 2349,
+      "dateRange": {
+        "start": "2025-09-29 02:53:24",
+        "end": "2026-04-01 16:11:26"
+      }
+    },
+    "hourlyDistribution": {
+      "0": 615,
+      "1": 705,
+      "2": 713,
+      "3": 1501,
+      "4": 1615,
+      "5": 1033,
+      "6": 410,
+      "7": 325,
+      "8": 158,
+      "9": 185,
+      "10": 198,
+      "11": 236,
+      "12": 824,
+      "13": 1191,
+      "14": 933,
+      "15": 868,
+      "16": 1405,
+      "17": 1240,
+      "18": 1279,
+      "19": 1286,
+      "20": 1496,
+      "21": 1600,
+      "22": 1304,
+      "23": 1309
+    },
+    "dayOfWeekDistribution": {
+      "Monday": 3618,
+      "Tuesday": 3138,
+      "Wednesday": 4790,
+      "Thursday": 2698,
+      "Friday": 4217,
+      "Saturday": 2110,
+      "Sunday": 1858
+    },
+    "likeToWatchRatio": 0.2675108118953141,
+    "favoriteToLikeRatio": 0.5975,
+    "shareMethodBreakdown": {
+      "chat_head": 841,
+      "sms": 70,
+      "copy": 4,
+      "more": 12,
+      "messenger": 1,
+      "whatsapp": 3,
+      "message": 10
+    },
+    "creatorCategories": [
+      {
+        "category": "other",
+        "count": 2078,
+        "sampleUsernames": [
+          "myoncevideos4",
+          "_beyonce_my_life__",
+          "dr_younan_nowzaradan"
+        ]
+      },
+      {
+        "category": "tech",
+        "count": 126,
+        "sampleUsernames": [
+          "surchai42",
+          "monaswain",
+          "maison_kemeti_"
+        ]
+      },
+      {
+        "category": "food",
+        "count": 37,
+        "sampleUsernames": [
+          "keenan_cooks2",
+          "chefqstr",
+          "anyafernaldcooks"
+        ]
+      },
+      {
+        "category": "music",
+        "count": 33,
+        "sampleUsernames": [
+          "alicesmithmusic",
+          "dj_bern",
+          "sobesings"
+        ]
+      },
+      {
+        "category": "hair-care",
+        "count": 19,
+        "sampleUsernames": [
+          "thatcurlychemist",
+          "braids.harmony",
+          "naturallyshauniece"
+        ]
+      },
+      {
+        "category": "beauty",
+        "count": 16,
+        "sampleUsernames": [
+          "anharbeauty",
+          "notskinnybutnotfat",
+          "glowwkailin"
+        ]
+      },
+      {
+        "category": "fitness",
+        "count": 16,
+        "sampleUsernames": [
+          "killerbodyfitness",
+          "sunnysideyogalates",
+          "finefitfitness_"
+        ]
+      },
+      {
+        "category": "business",
+        "count": 10,
+        "sampleUsernames": [
+          "hermoneymastery",
+          "tiktokforbusiness",
+          "johnsfinancetips"
+        ]
+      },
+      {
+        "category": "fashion",
+        "count": 8,
+        "sampleUsernames": [
+          "bruzhfitwear",
+          "myfashionbreak",
+          "tokyo.stylez"
+        ]
+      },
+      {
+        "category": "fragrance",
+        "count": 3,
+        "sampleUsernames": [
+          "glorymartialartscenter",
+          "anechkafragrances",
+          "shaeinthecloud"
+        ]
+      },
+      {
+        "category": "travel",
+        "count": 3,
+        "sampleUsernames": [
+          "travelandmunchies",
+          "explorewithdasom",
+          "travelwiththeharmony"
+        ]
+      }
+    ]
+  },
+  "errors": {
+    "qualification": null,
+    "contentIdeas": null
+  }
+}
