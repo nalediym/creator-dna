@@ -2,6 +2,7 @@
 
 import { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { unzipSync } from "fflate";
 import type { ParseWorkerResult, ParseWorkerError } from "@/workers/parse-worker";
 
 type UploadState =
@@ -18,10 +19,14 @@ export function FileUpload() {
 
   const processFile = useCallback(
     async (file: File) => {
-      if (!file.name.endsWith(".json")) {
+      const isZip = file.name.endsWith(".zip");
+      const isJson = file.name.endsWith(".json");
+
+      if (!isZip && !isJson) {
         setState({
           status: "error",
-          message: "Please upload a JSON file. TikTok exports are in JSON format.",
+          message:
+            "Please upload your TikTok data export (.zip or .json).",
         });
         return;
       }
@@ -29,7 +34,27 @@ export function FileUpload() {
       setState({ status: "parsing", fileName: file.name });
 
       try {
-        const text = await file.text();
+        let text: string;
+
+        if (isZip) {
+          // Extract JSON from TikTok ZIP export
+          const buffer = await file.arrayBuffer();
+          const unzipped = unzipSync(new Uint8Array(buffer));
+          const jsonFile = Object.keys(unzipped).find((name) =>
+            name.endsWith(".json"),
+          );
+          if (!jsonFile) {
+            setState({
+              status: "error",
+              message:
+                "No JSON file found inside the ZIP. Make sure this is a TikTok data export.",
+            });
+            return;
+          }
+          text = new TextDecoder().decode(unzipped[jsonFile]);
+        } else {
+          text = await file.text();
+        }
 
         // Parse in Web Worker to avoid blocking the main thread
         const worker = new Worker(
@@ -177,19 +202,19 @@ export function FileUpload() {
         <div className="text-base text-text-secondary">
           Drop your{" "}
           <span className="text-accent font-medium">
-            user_data_tiktok.json
+            TikTok data export
           </span>{" "}
           here
         </div>
         <div className="text-[13px] text-text-faint mt-2">
-          Settings &rarr; Privacy &rarr; Download your data &rarr; JSON
+          .zip or .json &middot; Settings &rarr; Privacy &rarr; Download your data
         </div>
       </div>
 
       <input
         ref={inputRef}
         type="file"
-        accept=".json"
+        accept=".json,.zip"
         className="hidden"
         onChange={(e) => {
           const file = e.target.files?.[0];
