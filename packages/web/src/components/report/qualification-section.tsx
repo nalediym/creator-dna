@@ -6,7 +6,7 @@ export function QualificationSection({
   qualification: QualificationResponse;
 }) {
   return (
-    <section className="py-16 animate-in fade-in duration-500">
+    <section id="qualified" className="py-16 animate-in fade-in duration-500">
       <div className="font-[family-name:var(--font-data)] text-[11px] font-medium uppercase tracking-[0.15em] text-accent mb-6">
         02 — Why You&apos;re Qualified
       </div>

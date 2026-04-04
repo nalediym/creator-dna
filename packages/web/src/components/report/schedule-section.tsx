@@ -21,7 +21,7 @@ export function ScheduleSection({ schedule }: { schedule: ScheduleData }) {
   const bestDaySet = new Set(schedule.bestDays);
 
   return (
-    <section className="py-16 animate-in fade-in duration-500">
+    <section id="schedule" className="py-16 animate-in fade-in duration-500">
       <div className="font-[family-name:var(--font-data)] text-[11px] font-medium uppercase tracking-[0.15em] text-accent mb-6">
         04 — Your Audience&apos;s Schedule
       </div>

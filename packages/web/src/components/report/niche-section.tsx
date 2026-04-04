@@ -5,7 +5,7 @@ import type { NicheResponse } from "@creator-dna/core";
 
 export function NicheSection({ niches }: { niches: NicheResponse }) {
   return (
-    <section className="py-16 animate-in fade-in duration-500">
+    <section id="niches" className="py-16 animate-in fade-in duration-500">
       <div className="font-[family-name:var(--font-data)] text-[11px] font-medium uppercase tracking-[0.15em] text-accent mb-6">
         01 — Your Niches
       </div>

@@ -144,7 +144,7 @@ export function ShareCard({ niches, summary }: ShareCardProps) {
   }, [format]);
 
   return (
-    <section className="py-16 border-t border-border-subtle">
+    <section id="share" className="py-16 border-t border-border-subtle">
       <div className="font-[family-name:var(--font-data)] text-[11px] font-medium uppercase tracking-[0.15em] text-accent mb-6">
         05 — Share Your DNA
       </div>

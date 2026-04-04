@@ -8,7 +8,7 @@ export function ReportHeader({ summary }: { summary: CreatorDNASummary }) {
       <h1 className="font-[family-name:var(--font-display)] text-[2rem] font-normal text-text-primary mb-2">
         Your Creator DNA
       </h1>
-      <span className="inline-block font-[family-name:var(--font-data)] text-xs text-text-muted bg-surface px-3 py-1 rounded-full">
+      <span className="inline-block font-[family-name:var(--font-data)] text-xs text-text-muted bg-surface px-3 py-1 rounded-full tabular-nums">
         Based on {videosWatched.toLocaleString()} videos &middot;{" "}
         {videosLiked.toLocaleString()} likes &middot;{" "}
         {searchesCount.toLocaleString()} searches

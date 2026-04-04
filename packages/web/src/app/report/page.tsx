@@ -19,6 +19,7 @@ import { SectionSkeleton } from "@/components/report/section-skeleton";
 import { ErrorBanner } from "@/components/report/error-banner";
 import { ShareCard } from "@/components/report/share-card";
 import { ReportFooter } from "@/components/report/report-footer";
+import { ProgressDots } from "@/components/report/progress-dots";
 
 interface StoredReport {
   niches: NicheResponse | null;
@@ -56,6 +57,10 @@ export default function ReportPage() {
       .catch(() => router.push("/"));
   }, [router]);
 
+  useEffect(() => {
+    if (report) document.title = "Your Creator DNA Report";
+  }, [report]);
+
   if (!report) {
     return (
       <main className="max-w-[680px] mx-auto px-6 py-16">
@@ -66,6 +71,7 @@ export default function ReportPage() {
 
   return (
     <main className="max-w-[680px] mx-auto px-6 py-16">
+      <ProgressDots />
       <ReportHeader summary={report.summary} />
 
       <div className="divide-y divide-border-subtle">

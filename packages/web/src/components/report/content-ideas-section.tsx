@@ -9,7 +9,7 @@ export function ContentIdeasSection({
   const bonus = ideas.ideas.slice(5);
 
   return (
-    <section className="py-16 animate-in fade-in duration-500">
+    <section id="ideas" className="py-16 animate-in fade-in duration-500">
       <div className="font-[family-name:var(--font-data)] text-[11px] font-medium uppercase tracking-[0.15em] text-accent mb-6">
         03 — Your First 5 Videos
       </div>
@@ -45,7 +45,7 @@ export function ContentIdeasSection({
 
       {bonus.length > 0 && (
         <>
-          <div className="font-[family-name:var(--font-data)] text-[11px] font-medium uppercase tracking-[0.15em] text-text-muted mt-10 mb-4">
+          <div className="font-[family-name:var(--font-data)] text-[11px] font-medium uppercase tracking-[0.15em] text-accent mt-10 mb-4">
             Bonus Ideas (Week 2+)
           </div>
           <div className="space-y-3">
