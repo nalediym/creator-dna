@@ -97,7 +97,11 @@ export default function ReportPage() {
           <SectionSkeleton />
         )}
 
-        <ScheduleSection schedule={report.schedule} />
+        <ScheduleSection
+          schedule={report.schedule}
+          dayDistribution={report.summary.dayOfWeekDistribution}
+          hourDistribution={report.summary.hourlyDistribution}
+        />
 
         {report.niches && (
           <ShareCard niches={report.niches} summary={report.summary} />
