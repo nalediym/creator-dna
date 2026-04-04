@@ -17,6 +17,8 @@ import { ScheduleSection } from "@/components/report/schedule-section";
 import { ReportHeader } from "@/components/report/report-header";
 import { SectionSkeleton } from "@/components/report/section-skeleton";
 import { ErrorBanner } from "@/components/report/error-banner";
+import { ShareCard } from "@/components/report/share-card";
+import { ReportFooter } from "@/components/report/report-footer";
 
 interface StoredReport {
   niches: NicheResponse | null;
@@ -90,7 +92,13 @@ export default function ReportPage() {
         )}
 
         <ScheduleSection schedule={report.schedule} />
+
+        {report.niches && (
+          <ShareCard niches={report.niches} summary={report.summary} />
+        )}
       </div>
+
+      <ReportFooter />
     </main>
   );
 }
