@@ -14,7 +14,7 @@ export function QualificationSection({
         You know more than you think.
       </h2>
 
-      <div className="space-y-4">
+      <div className="space-y-5">
         {qualification.qualifications.map((qual, i) => (
           <div
             key={i}
@@ -24,15 +24,34 @@ export function QualificationSection({
                 "linear-gradient(135deg, var(--surface-raised) 0%, var(--surface) 100%)",
             }}
           >
-            {qual.stats[0] && (
-              <div className="font-[family-name:var(--font-data)] text-[2rem] font-light text-accent leading-none mb-1">
-                {qual.stats[0]}
-              </div>
-            )}
-            <p className="text-sm text-text-secondary">{qual.narrative}</p>
+            {/* Stats as visual anchors */}
+            <div className="flex flex-wrap gap-x-6 gap-y-2 mb-3">
+              {qual.stats.map((stat, j) => (
+                <div key={j} className="font-[family-name:var(--font-data)] text-sm text-accent">
+                  {stat}
+                </div>
+              ))}
+            </div>
+
+            {/* Niche label */}
+            <div className="text-xs text-text-muted mb-2 uppercase tracking-wider">
+              {qual.niche}
+            </div>
+
+            {/* Shortened narrative — limit to first 2-3 sentences */}
+            <p className="text-sm text-text-secondary leading-relaxed">
+              {truncateNarrative(qual.narrative)}
+            </p>
           </div>
         ))}
       </div>
     </section>
   );
+}
+
+function truncateNarrative(text: string): string {
+  // Show first 2-3 sentences to avoid text walls
+  const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+  if (sentences.length <= 3) return text;
+  return sentences.slice(0, 3).join("").trim();
 }

@@ -57,15 +57,14 @@ function NicheCard({
           {niche.confidence}%
         </span>
       </div>
-      <p className="text-[13px] text-text-muted">
+      <ul className="space-y-1 mt-2">
         {niche.evidence.map((e, i) => (
-          <span key={i}>
-            {i > 0 && " "}
-            {e}
-            {i < niche.evidence.length - 1 && "."}
-          </span>
+          <li key={i} className="text-[13px] text-text-muted flex items-start gap-2">
+            <span className="text-accent mt-0.5 text-[10px]">&bull;</span>
+            <span>{e}</span>
+          </li>
         ))}
-      </p>
+      </ul>
     </div>
   );
 }
