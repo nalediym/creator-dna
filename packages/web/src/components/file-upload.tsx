@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { unzipSync } from "fflate";
+import { isLocalAIAvailable, analyzeLocally } from "@/lib/local-ai";
 import type { ParseWorkerResult, ParseWorkerError } from "@/workers/parse-worker";
 
 type UploadState =
@@ -75,28 +76,47 @@ export function FileUpload() {
           setState({ status: "analyzing" });
 
           try {
-            const res = await fetch("/api/analyze", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                summary: result.summary,
-                schedule: result.schedule,
-              }),
-            });
+            // Fallback chain: Gemini Nano (local) → Server API (Claude)
+            const localAvailable = await isLocalAIAvailable();
+            let analysis: {
+              niches: unknown;
+              qualification: unknown;
+              contentIdeas: unknown;
+              errors: { qualification: string | null; contentIdeas: string | null };
+            } | null = null;
 
-            if (!res.ok) {
-              const errorData = await res.json().catch(() => null);
-              setState({
-                status: "error",
-                message:
-                  errorData?.error ||
-                  `Analysis failed (${res.status}). Please try again.`,
+            if (localAvailable) {
+              console.log("[Creator DNA] Using local AI (Gemini Nano)");
+              analysis = await analyzeLocally(result.summary);
+            }
+
+            // Fall back to server if local AI failed or unavailable
+            if (!analysis?.niches) {
+              console.log("[Creator DNA] Falling back to server API");
+              const res = await fetch("/api/analyze", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  summary: result.summary,
+                  schedule: result.schedule,
+                }),
               });
-              return;
+
+              if (!res.ok) {
+                const errorData = await res.json().catch(() => null);
+                setState({
+                  status: "error",
+                  message:
+                    errorData?.error ||
+                    `Analysis failed (${res.status}). Please try again.`,
+                });
+                return;
+              }
+
+              analysis = await res.json();
             }
 
             // Store analysis result in sessionStorage for the report page
-            const analysis = await res.json();
             sessionStorage.setItem(
               "creator-dna-report",
               JSON.stringify({
@@ -110,7 +130,7 @@ export function FileUpload() {
           } catch {
             setState({
               status: "error",
-              message: "Network error. Please check your connection and try again.",
+              message: "Analysis failed. Please try again.",
             });
           }
         };
@@ -173,7 +193,7 @@ export function FileUpload() {
           Analyzing your Creator DNA...
         </div>
         <div className="text-[13px] text-text-faint">
-          This takes about 10 seconds.
+          Running on-device AI. Nothing leaves your browser.
         </div>
       </div>
     );

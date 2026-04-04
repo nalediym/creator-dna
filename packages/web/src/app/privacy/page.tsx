@@ -88,11 +88,13 @@ export default function PrivacyPage() {
 
         <section>
           <h2 className="font-[family-name:var(--font-data)] text-[11px] font-medium uppercase tracking-[0.15em] text-accent mb-3">
-            What we send to our server
+            How the AI analysis works
           </h2>
           <p className="mb-3">
-            Only an aggregated summary (~2KB) is sent to generate your report.
-            Here&apos;s the exact shape of the data:
+            If your browser supports on-device AI (Chrome with Gemini Nano),
+            the entire analysis runs locally. Nothing is sent anywhere.
+            If on-device AI isn&apos;t available, we fall back to a server
+            that receives only an aggregated summary (~2KB):
           </p>
           <pre className="bg-surface border border-border rounded-xl p-4 text-xs font-[family-name:var(--font-data)] text-text-muted overflow-x-auto">
 {`{
