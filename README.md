@@ -86,9 +86,34 @@ If you're not on Chrome with Nano, the app will tell you. We made that choice on
 | [`packages/core/src/prompts.ts`](packages/core/src/prompts.ts) | Three Zod schemas validating Claude responses + three prompt builders. Sequential-then-parallel orchestration is documented inline. |
 | [`packages/core/src/schedule.ts`](packages/core/src/schedule.ts) | Deterministic schedule computation — no LLM call, just rules. |
 
+## Bring your own agent (MCP)
+
+If you don't run Chrome with Nano, point your existing Claude Desktop / Claude Code / Cursor / Codex at Creator DNA's MCP server. Three tools, **zero LLM credentials on the server**:
+
+| Tool | Stage | What |
+|------|-------|------|
+| `analyze_export(path)` | 1 (always first) | Parse + aggregate a TikTok export from a local path. Returns the ~2KB summary, posting schedule, section coverage. No LLM. |
+| `get_analysis_prompts(summary, niches?)` | 2 + 3 | Returns the prompts your agent should run with its own LLM. Stage 2 (no `niches`): clustering prompt. Stage 3 (with `niches`): qualification + content-ideas prompts to run in parallel. |
+| `validate_analysis(schema, response)` | After every LLM call | Zod-validates the structured response so the agent self-checks before continuing. |
+
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "creator-dna": {
+      "command": "bun",
+      "args": ["/absolute/path/to/creator-dna/packages/mcp/src/bin.ts"]
+    }
+  }
+}
+```
+
+Full docs: [`packages/mcp/README.md`](packages/mcp/README.md).
+
 ## Status
 
-`v0.1-alpha`. Local-only architecture &mdash; no LLM keys required. The web app runs in Chrome with on-device Gemini Nano; the CLI runner works locally for development. An MCP server is next so external agents (Claude Code, Cursor, Claude Desktop) can run the analysis through their own subscription &mdash; same "bring your own agent" pattern.
+`v0.1-alpha`. Local-only architecture &mdash; no LLM keys required at any layer. The web app runs analysis in Chrome with on-device Gemini Nano; the MCP server lets any other agent run the same pipeline using its own subscription. The CLI runner works locally for development.
 
 ## Why this exists
 

@@ -1,0 +1,26 @@
+{
+  "name": "@creator-dna/mcp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MCP server for Creator DNA — exposes TikTok-export analysis as 3 intent-shaped tools so any MCP client (Claude Desktop, Cursor, Codex) can run the analysis through their own LLM subscription. Bring-your-own-agent: zero keys on the server side.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "bin": {
+    "creator-dna-mcp": "./src/bin.ts"
+  },
+  "main": "./src/server.ts",
+  "scripts": {
+    "start": "bun run src/bin.ts",
+    "dev": "bun run --watch src/bin.ts"
+  },
+  "dependencies": {
+    "@creator-dna/core": "*",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "fflate": "^0.8.2",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0"
+  }
+}
