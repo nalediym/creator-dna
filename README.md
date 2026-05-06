@@ -27,12 +27,13 @@ TikTok JSON → Parse → Aggregate → 3 Claude calls → Editorial report
 
 ## Privacy by architecture
 
-The most sensitive part of TikTok's export is the *raw watch history*. Creator DNA never sends it anywhere.
+Creator DNA is **local-only by design**. Nothing about your TikTok export ever leaves your laptop &mdash; including the aggregated summary.
 
 - **Parsing happens in your browser** via a Web Worker (no main-thread blocking, no upload).
-- **Aggregation is the privacy boundary.** Only the summary leaves the browser — search-term clusters, engagement ratios, creator categories. Never the per-video records.
-- **Three Claude calls** receive the aggregated summary, not the raw export. Sequential-then-parallel: clustering first, then qualification + content-ideas in parallel.
-- **Schedule computation is deterministic** — no LLM call needed.
+- **Aggregation is the privacy boundary.** A small summary (~2KB: search-term clusters, engagement ratios, creator categories) is built in-browser. Per-video records never leave.
+- **Analysis runs on Chrome's built-in Gemini Nano** &mdash; on-device, no API key, no network call. Three structured prompts via Chrome's Prompt API, with Zod schemas validating each response.
+- **Schedule computation is deterministic** &mdash; no LLM call needed.
+- **No server fallback.** If on-device AI isn't available, the app says so and stops, rather than silently shipping your data anywhere.
 
 If your laptop crashes mid-analysis, nothing was uploaded. There is nothing to leak.
 
@@ -47,14 +48,13 @@ packages/
   web/         Next.js 16 App Router app, deployed to Vercel
 ```
 
-**Stack:** Next.js 16 · React 19 · AI SDK v6 (`generateObject`) · Anthropic Claude · Zod · Tailwind · shadcn · Web Worker + Comlink · fflate (zip parsing) · Turnstile + global rate limit (5/IP/day, 50/day cap).
+**Stack:** Next.js 16 · React 19 · Chrome Prompt API (Gemini Nano) · Zod · Tailwind · shadcn · Web Worker + Comlink · fflate (zip parsing).
 
 ## Quickstart (developer)
 
 ```bash
 git clone https://github.com/nalediym/creator-dna && cd creator-dna
 npm install
-cp packages/web/.env.example packages/web/.env.local  # add your ANTHROPIC_API_KEY
 
 # Dev
 cd packages/web && npm run dev
@@ -66,12 +66,16 @@ npm test                    # parser, aggregator, schedule
 npm run build
 ```
 
+No API keys. No `.env`. The app uses Chrome's built-in Gemini Nano on-device.
+
 To use the app:
 
-1. Get your TikTok export at [TikTok's Data & Privacy settings](https://www.tiktok.com/privacy/data) → "Download your data" → JSON format. Wait for the email (usually a few hours).
-2. Open the running app at `http://localhost:3000`.
+1. Get your TikTok export at [TikTok's Data & Privacy settings](https://www.tiktok.com/privacy/data) &rarr; *Download your data* &rarr; JSON format. Wait for the email (usually a few hours).
+2. Open the running app at `http://localhost:3000` **in Chrome 127+ with [`chrome://flags/#prompt-api-for-gemini-nano`](chrome://flags/#prompt-api-for-gemini-nano) enabled.**
 3. Drop your `user_data_tiktok.json` (or the unzipped folder) onto the page.
-4. Watch the report stream in section by section as each Claude call completes.
+4. Watch the report stream in section by section as each on-device prompt completes.
+
+If you're not on Chrome with Nano, the app will tell you. We made that choice on purpose &mdash; no silent server fallback.
 
 ## Code highlights
 
@@ -84,7 +88,7 @@ To use the app:
 
 ## Status
 
-`v0.1-alpha`. Web app is deployed; the CLI runner works locally for development; an MCP server is on the roadmap so external agents (Claude Code, Cursor, Claude Desktop) can run the analysis on a Takeout export they have access to.
+`v0.1-alpha`. Local-only architecture &mdash; no LLM keys required. The web app runs in Chrome with on-device Gemini Nano; the CLI runner works locally for development. An MCP server is next so external agents (Claude Code, Cursor, Claude Desktop) can run the analysis through their own subscription &mdash; same "bring your own agent" pattern.
 
 ## Why this exists
 

@@ -76,44 +76,28 @@ export function FileUpload() {
           setState({ status: "analyzing" });
 
           try {
-            // Fallback chain: Gemini Nano (local) → Server API (Claude)
+            // Local-only architecture: Gemini Nano (Chrome built-in, on-device).
+            // Nothing about your TikTok export ever leaves the laptop.
             const localAvailable = await isLocalAIAvailable();
-            let analysis: {
-              niches: unknown;
-              qualification: unknown;
-              contentIdeas: unknown;
-              errors: { qualification: string | null; contentIdeas: string | null };
-            } | null = null;
-
-            if (localAvailable) {
-              console.log("[Creator DNA] Using local AI (Gemini Nano)");
-              analysis = await analyzeLocally(result.summary);
+            if (!localAvailable) {
+              setState({
+                status: "error",
+                message:
+                  "Creator DNA needs Chrome's on-device AI (Gemini Nano) — Chrome 127+ with the Prompt API enabled. We made this choice on purpose: nothing about your TikTok export ever leaves your laptop, including the aggregated summary. Open this site in Chrome with chrome://flags/#prompt-api-for-gemini-nano enabled, or come back from a Chrome 127+ install.",
+              });
+              return;
             }
 
-            // Fall back to server if local AI failed or unavailable
+            console.log("[Creator DNA] Using local AI (Gemini Nano) — fully on-device");
+            const analysis = await analyzeLocally(result.summary);
+
             if (!analysis?.niches) {
-              console.log("[Creator DNA] Falling back to server API");
-              const res = await fetch("/api/analyze", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  summary: result.summary,
-                  schedule: result.schedule,
-                }),
+              setState({
+                status: "error",
+                message:
+                  "Local analysis didn't return results. This usually clears with a page refresh. If it persists, please open an issue.",
               });
-
-              if (!res.ok) {
-                const errorData = await res.json().catch(() => null);
-                setState({
-                  status: "error",
-                  message:
-                    errorData?.error ||
-                    `Analysis failed (${res.status}). Please try again.`,
-                });
-                return;
-              }
-
-              analysis = await res.json();
+              return;
             }
 
             // Store analysis result in sessionStorage for the report page

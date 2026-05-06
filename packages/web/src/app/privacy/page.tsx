@@ -91,10 +91,13 @@ export default function PrivacyPage() {
             How the AI analysis works
           </h2>
           <p className="mb-3">
-            If your browser supports on-device AI (Chrome with Gemini Nano),
-            the entire analysis runs locally. Nothing is sent anywhere.
-            If on-device AI isn&apos;t available, we fall back to a server
-            that receives only an aggregated summary (~2KB):
+            Creator DNA is <strong>local-only by design</strong>. The analysis
+            runs entirely in your browser using Chrome&apos;s on-device AI
+            (Gemini Nano). Nothing is sent anywhere &mdash; not even an
+            aggregated summary. If your browser doesn&apos;t support on-device
+            AI, the app will tell you and stop, rather than silently fall back
+            to a remote server. For reference, the local model sees a small
+            aggregated summary (~2KB) that never leaves your device:
           </p>
           <pre className="bg-surface border border-border rounded-xl p-4 text-xs font-[family-name:var(--font-data)] text-text-muted overflow-x-auto">
 {`{

@@ -1,12 +1,11 @@
 /**
  * Local AI analysis using Chrome's built-in Gemini Nano.
  *
- * Privacy: EVERYTHING stays in the browser. No server calls.
- * Cost: $0. The model runs on-device.
- *
- * Fallback chain:
- *   1. Chrome Prompt API (Gemini Nano) — free, instant
- *   2. Server API route (/api/analyze) — needs API key
+ * Privacy: EVERYTHING stays in the browser. No server calls. No fallback.
+ * Cost: $0. The model runs on-device via the Chrome Prompt API.
+ * Availability: Chrome 127+ with `chrome://flags/#prompt-api-for-gemini-nano`
+ * enabled. If unavailable, the UI tells the user instead of silently falling
+ * back to a remote model.
  */
 
 import type {

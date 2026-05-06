@@ -45,7 +45,7 @@ vercel deploy --prod        # Production
 - `packages/core/parser.ts` — Port of build_db.py, parses TikTok JSON
 - `packages/core/prompts.ts` — 3 Claude prompt templates + Zod schemas
 - `packages/core/aggregator.ts` — CreatorDNASummary builder
-- `packages/web/app/api/analyze/route.ts` — API route, sequential-then-parallel prompts
+- `packages/web/src/lib/local-ai.ts` — Chrome Prompt API (Gemini Nano) integration; sequential-then-parallel prompts run on-device
 - `DESIGN.md` — Complete design system (colors, typography, spacing, motion)
 
 ## Skill routing
