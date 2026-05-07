@@ -10,9 +10,14 @@ export default function PrivacyPage() {
         &larr; Back
       </Link>
 
-      <h1 className="font-[family-name:var(--font-display)] text-[2rem] font-normal text-text-primary mt-8 mb-6">
-        Your data stays yours.
+      <h1 className="font-[family-name:var(--font-display)] text-[2rem] font-normal text-text-primary mt-8 mb-3">
+        Your data never leaves your browser.
       </h1>
+      <p className="text-text-secondary text-[15px] leading-relaxed mb-10">
+        No accounts. No sign-ups. No cookies. No tracking. No telemetry. The
+        analysis runs on Chrome&rsquo;s on-device AI (Gemini Nano) and the only
+        thing that crosses the network is the page itself.
+      </p>
 
       <div className="space-y-8 text-text-secondary text-[15px] leading-relaxed">
         <section>
@@ -135,6 +140,59 @@ export default function PrivacyPage() {
             the analysis and is discarded as soon as the tab closes. We
             don&apos;t even know you were here.
           </p>
+        </section>
+
+        <section>
+          <h2 className="font-[family-name:var(--font-data)] text-[11px] font-medium uppercase tracking-[0.15em] text-accent mb-3">
+            Don&apos;t take our word for it
+          </h2>
+          <p className="mb-3">
+            The whole app is open source. Read the code that does the parsing,
+            the prompts, and the AI call &mdash; and confirm for yourself that
+            none of them touch a server:
+          </p>
+          <ul className="text-sm space-y-1.5">
+            <li>
+              <a
+                href="https://github.com/nalediym/creator-dna/blob/main/packages/core/src/parser.ts"
+                className="text-accent underline hover:no-underline"
+                target="_blank"
+                rel="noreferrer"
+              >
+                parser.ts
+              </a>{" "}
+              <span className="text-text-faint">
+                &mdash; reads your TikTok export inside a Web Worker
+              </span>
+            </li>
+            <li>
+              <a
+                href="https://github.com/nalediym/creator-dna/blob/main/packages/web/src/lib/local-ai.ts"
+                className="text-accent underline hover:no-underline"
+                target="_blank"
+                rel="noreferrer"
+              >
+                local-ai.ts
+              </a>{" "}
+              <span className="text-text-faint">
+                &mdash; calls Chrome&apos;s on-device LanguageModel API
+              </span>
+            </li>
+            <li>
+              <a
+                href="https://github.com/nalediym/creator-dna"
+                className="text-accent underline hover:no-underline"
+                target="_blank"
+                rel="noreferrer"
+              >
+                full source on GitHub
+              </a>{" "}
+              <span className="text-text-faint">
+                &mdash; clone it and run it yourself if you don&apos;t trust the
+                deployed version
+              </span>
+            </li>
+          </ul>
         </section>
       </div>
     </main>
