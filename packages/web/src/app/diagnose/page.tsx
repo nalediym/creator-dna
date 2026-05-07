@@ -8,6 +8,7 @@ import {
   formatBytes,
   type DiagnoseStatus,
 } from "@/lib/diagnose";
+import { NanoDownloadButton } from "@/components/nano-download-button";
 
 export default function DiagnosePage() {
   const [diag, setDiag] = useState<DiagnoseStatus | null>(null);
@@ -88,7 +89,17 @@ export default function DiagnosePage() {
 
           <Section title="Next step">
             <p className="text-text-secondary text-sm">{nextStep(diag)}</p>
-            {needsFlagSetup(diag) && (
+
+            {(diag.status === "downloadable" || diag.status === "downloading") && (
+              <div className="mt-4">
+                <NanoDownloadButton
+                  onReady={run}
+                  initialDownloading={diag.status === "downloading"}
+                />
+              </div>
+            )}
+
+            {diag.status === "api-missing" && (
               <ol className="mt-3 text-[13px] text-text-secondary space-y-1.5 list-decimal list-inside">
                 <li>
                   Copy{" "}
@@ -100,15 +111,7 @@ export default function DiagnosePage() {
                 <li>
                   Set it to <strong>Enabled</strong> and click Relaunch
                 </li>
-                <li>
-                  Visit{" "}
-                  <code className="font-[family-name:var(--font-data)] text-accent">
-                    chrome://components
-                  </code>{" "}
-                  and click Check for update on{" "}
-                  <em>Optimization Guide On Device Model</em>
-                </li>
-                <li>Wait for the ~2 GB download, then come back and re-check</li>
+                <li>Come back here — the page will offer a one-click download</li>
               </ol>
             )}
           </Section>
@@ -172,9 +175,9 @@ function nextStep(d: DiagnoseStatus): string {
     case "available":
       return "You're ready. Head back to the upload page and drop your TikTok export.";
     case "downloadable":
-      return "Chrome can fetch the on-device model. Trigger the download from chrome://components, then re-check.";
+      return "Chrome can fetch the on-device model. Click the button below to start the one-time download.";
     case "downloading":
-      return "Download in progress. Leave the tab open and re-check in a minute.";
+      return "Download in progress. Leave the tab open — this page will switch to ready when it's done.";
     case "wrong-browser":
       return "Open this URL in Chrome 138+ or Edge — other browsers don't expose the on-device AI API yet.";
     case "mobile":
@@ -190,6 +193,3 @@ function nextStep(d: DiagnoseStatus): string {
   }
 }
 
-function needsFlagSetup(d: DiagnoseStatus): boolean {
-  return d.status === "api-missing" || d.status === "downloadable";
-}

@@ -7,6 +7,7 @@ import {
   browserLabel,
   type DiagnoseStatus,
 } from "@/lib/diagnose";
+import { NanoDownloadButton } from "@/components/nano-download-button";
 
 type Props = {
   /** Children render only when local AI is `available`. */
@@ -45,6 +46,7 @@ function NanoStatusCard({
   onRetry: () => void;
 }) {
   const content = renderForStatus(diag);
+  const showDownload = diag.status === "downloadable" || diag.status === "downloading";
 
   return (
     <div className="max-w-[500px] w-full mx-auto border-2 border-dashed border-border rounded-[16px] p-8 text-left">
@@ -64,6 +66,15 @@ function NanoStatusCard({
             <li key={i}>{s}</li>
           ))}
         </ol>
+      )}
+
+      {showDownload && (
+        <div className="mb-4">
+          <NanoDownloadButton
+            onReady={onRetry}
+            initialDownloading={diag.status === "downloading"}
+          />
+        </div>
       )}
 
       <div className="flex flex-wrap items-center gap-3 text-[13px]">
@@ -146,21 +157,16 @@ function renderForStatus(diag: DiagnoseStatus): RenderedStatus {
     case "downloadable":
       return {
         tag: "One-time setup",
-        headline: "Chrome can download the on-device model.",
+        headline: "Download the on-device model to get started.",
         body:
-          "Your browser is ready — it just hasn't fetched Gemini Nano yet. The next version of this page will start the download for you with a single click. For now, trigger it manually.",
-        steps: [
-          "Open chrome://components in a new tab",
-          "Find Optimization Guide On Device Model and click Check for update",
-          "Wait for the download (~2 GB on first run), then click Re-check",
-        ],
+          "Your browser is ready — it just hasn't fetched Gemini Nano yet. Click below and Chrome will download it once. After that everything runs on your laptop, including future analyses.",
       };
     case "downloading":
       return {
         tag: "Downloading",
         headline: "Chrome is fetching the on-device model.",
         body:
-          "First-time setup downloads ~2 GB. Once it finishes, this page will switch to the upload flow automatically. Leave the tab open and click Re-check in a minute.",
+          "First-time setup downloads ~2 GB. Once it finishes, this page will switch to the upload flow automatically.",
       };
     case "hardware-fail":
       return {
