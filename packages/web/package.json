@@ -11,6 +11,7 @@
   "dependencies": {
     "@base-ui/react": "^1.3.0",
     "@creator-dna/core": "*",
+    "@vercel/analytics": "^2.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "fflate": "^0.8.2",

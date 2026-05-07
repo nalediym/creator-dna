@@ -8,6 +8,7 @@ import {
   type DiagnoseStatus,
 } from "@/lib/diagnose";
 import { NanoDownloadButton } from "@/components/nano-download-button";
+import { trackHomeLoaded } from "@/lib/track";
 
 type Props = {
   /** Children render only when local AI is `available`. */
@@ -22,7 +23,10 @@ export function NanoGate({ children }: Props) {
   }, []);
 
   useEffect(() => {
-    void diagnoseLocalAI().then(setDiag);
+    void diagnoseLocalAI().then((d) => {
+      setDiag(d);
+      trackHomeLoaded(d.status);
+    });
   }, []);
 
   if (!diag) {
