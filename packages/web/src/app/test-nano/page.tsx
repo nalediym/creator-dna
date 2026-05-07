@@ -9,6 +9,11 @@ import {
   type CreatorDNASummary,
   type Niche,
 } from "@creator-dna/core";
+import {
+  nicheJsonSchema,
+  qualificationJsonSchema,
+  contentIdeasJsonSchema,
+} from "@/lib/nano-schemas";
 
 interface RunStep {
   label: string;
@@ -22,17 +27,13 @@ interface RunStep {
 type Status = "idle" | "loading-summary" | "running" | "done" | "error";
 
 const SYSTEM_PROMPT =
-  "You are a data analyst. Respond with ONLY valid JSON. No markdown, no explanation, no code fences. Just the JSON object.";
-
-const NICHE_SCHEMA_HINT =
-  '{ "niches": [{ "name": "string", "confidence": 0-100, "evidence": ["string"] }] }';
-const QUAL_SCHEMA_HINT =
-  '{ "qualifications": [{ "niche": "string", "narrative": "string", "stats": ["string"] }] }';
-const IDEAS_SCHEMA_HINT =
-  '{ "ideas": [{ "title": "string", "hook": "string", "format": "string", "niche": "string" }] }';
+  "You are a data analyst. Output a single JSON object that matches the provided schema. No commentary.";
 
 interface LMSession {
-  prompt(input: string): Promise<string>;
+  prompt(
+    input: string,
+    options?: { responseConstraint?: object },
+  ): Promise<string>;
   destroy(): void;
 }
 interface LMOptions {
@@ -47,14 +48,6 @@ declare const LanguageModel:
       create(opts?: LMOptions): Promise<LMSession>;
     }
   | undefined;
-
-function extractJson(text: string): string {
-  const fenceMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
-  if (fenceMatch) return fenceMatch[1].trim();
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (jsonMatch) return jsonMatch[0];
-  return text;
-}
 
 export default function TestNanoPage() {
   const [summaryJson, setSummaryJson] = useState("");
@@ -89,9 +82,8 @@ export default function TestNanoPage() {
     async (
       label: string,
       promptText: string,
-      schemaHint: string,
+      schema: object,
     ): Promise<RunStep> => {
-      const fullPrompt = `${promptText}\n\nRespond with ONLY valid JSON matching this schema:\n${schemaHint}`;
       const t0 = performance.now();
 
       if (typeof LanguageModel === "undefined") {
@@ -105,16 +97,16 @@ export default function TestNanoPage() {
         outputLanguage: "en",
       });
       try {
-        const raw = await session.prompt(fullPrompt);
+        const raw = await session.prompt(promptText, { responseConstraint: schema });
         const ms = performance.now() - t0;
         let parsed: unknown = null;
         let parseError: string | null = null;
         try {
-          parsed = JSON.parse(extractJson(raw));
+          parsed = JSON.parse(raw);
         } catch (e) {
           parseError = e instanceof Error ? e.message : String(e);
         }
-        return { label, promptText: fullPrompt, rawResponse: raw, parsed, parseError, ms };
+        return { label, promptText, rawResponse: raw, parsed, parseError, ms };
       } finally {
         session.destroy();
       }
@@ -140,7 +132,7 @@ export default function TestNanoPage() {
       const niches = await runOne(
         "1. Clustering",
         buildClusteringPrompt(summary),
-        NICHE_SCHEMA_HINT,
+        nicheJsonSchema,
       );
       setSteps([niches]);
 
@@ -155,12 +147,12 @@ export default function TestNanoPage() {
         runOne(
           "2. Qualification",
           buildQualificationPrompt(summary, parsedNiches),
-          QUAL_SCHEMA_HINT,
+          qualificationJsonSchema,
         ),
         runOne(
           "3. Content ideas",
           buildContentGapPrompt(summary, parsedNiches),
-          IDEAS_SCHEMA_HINT,
+          contentIdeasJsonSchema,
         ),
       ]);
       setSteps([niches, qual, ideas]);
