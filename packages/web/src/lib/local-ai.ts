@@ -19,6 +19,11 @@ import {
   buildQualificationPrompt,
   buildContentGapPrompt,
 } from "@creator-dna/core";
+import {
+  nicheJsonSchema,
+  qualificationJsonSchema,
+  contentIdeasJsonSchema,
+} from "@/lib/nano-schemas";
 
 // Chrome's LanguageModel API types
 declare global {
@@ -28,12 +33,16 @@ declare global {
       systemPrompt?: string;
       temperature?: number;
       topK?: number;
+      outputLanguage?: string;
     }): Promise<LanguageModelSession>;
   } | undefined;
 }
 
 interface LanguageModelSession {
-  prompt(input: string): Promise<string>;
+  prompt(
+    input: string,
+    options?: { responseConstraint?: object; omitResponseConstraintInput?: boolean },
+  ): Promise<string>;
   promptStreaming(input: string): ReadableStream<string>;
   destroy(): void;
 }
@@ -52,41 +61,29 @@ export async function isLocalAIAvailable(): Promise<boolean> {
 }
 
 /**
- * Extract JSON from a model response that might include markdown fences or extra text.
- */
-function extractJson(text: string): string {
-  // Try to find JSON in code fences first
-  const fenceMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
-  if (fenceMatch) return fenceMatch[1].trim();
-
-  // Try to find raw JSON object
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (jsonMatch) return jsonMatch[0];
-
-  return text;
-}
-
-/**
- * Run a prompt through Gemini Nano and parse the JSON response.
+ * Run a prompt through Gemini Nano with a JSON Schema constraint.
+ *
+ * `responseConstraint` forces token-by-token schema-compliant output, so the
+ * response is always valid JSON matching the schema — no parse failures, no
+ * truncated arrays, no markdown fences.
  */
 async function runLocalPrompt<T>(
   prompt: string,
-  schemaHint: string,
+  schema: object,
 ): Promise<T | null> {
   if (typeof LanguageModel === "undefined") return null;
 
   const session = await LanguageModel.create({
     systemPrompt:
-      "You are a data analyst. Respond with ONLY valid JSON. No markdown, no explanation, no code fences. Just the JSON object.",
+      "You are a data analyst. Output a single JSON object that matches the provided schema. No commentary.",
     temperature: 0.3,
     topK: 5,
+    outputLanguage: "en",
   });
 
   try {
-    const fullPrompt = `${prompt}\n\nRespond with ONLY valid JSON matching this schema:\n${schemaHint}`;
-    const response = await session.prompt(fullPrompt);
-    const json = extractJson(response);
-    return JSON.parse(json) as T;
+    const response = await session.prompt(prompt, { responseConstraint: schema });
+    return JSON.parse(response) as T;
   } catch (e) {
     console.error("Local AI prompt failed:", e);
     return null;
@@ -107,17 +104,10 @@ export async function analyzeLocally(
   contentIdeas: ContentIdeasResponse | null;
   errors: { qualification: string | null; contentIdeas: string | null };
 }> {
-  const nicheSchema =
-    '{ "niches": [{ "name": "string", "confidence": 0-100, "evidence": ["string"] }] }';
-  const qualSchema =
-    '{ "qualifications": [{ "niche": "string", "narrative": "string", "stats": ["string"] }] }';
-  const ideasSchema =
-    '{ "ideas": [{ "title": "string", "hook": "string", "format": "string", "niche": "string" }] }';
-
   // Step 1: Interest clustering (must complete first)
   const niches = await runLocalPrompt<NicheResponse>(
     buildClusteringPrompt(summary),
-    nicheSchema,
+    nicheJsonSchema,
   );
 
   if (!niches?.niches) {
@@ -136,11 +126,11 @@ export async function analyzeLocally(
   const [qualification, contentIdeas] = await Promise.all([
     runLocalPrompt<QualificationResponse>(
       buildQualificationPrompt(summary, niches.niches),
-      qualSchema,
+      qualificationJsonSchema,
     ),
     runLocalPrompt<ContentIdeasResponse>(
       buildContentGapPrompt(summary, niches.niches),
-      ideasSchema,
+      contentIdeasJsonSchema,
     ),
   ]);
 

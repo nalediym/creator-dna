@@ -36,7 +36,7 @@ export default function Home() {
           <span className="w-[6px] h-[6px] rounded-full bg-success" />
           Your data never leaves your browser.
           <Link href="/privacy" className="text-accent underline ml-1">
-            See what we send&nbsp;&rarr;
+            See for yourself&nbsp;&rarr;
           </Link>
         </div>
       </div>
