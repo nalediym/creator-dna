@@ -21,8 +21,9 @@ export default function PrivacyPage() {
           </h2>
           <p>
             Your TikTok export file is parsed entirely in your browser using a
-            Web Worker. The raw JSON never leaves your device. We extract only
-            aggregated statistics and send those to our server for AI analysis.
+            Web Worker. The raw JSON never leaves your device. We extract a
+            small aggregated summary and feed it to Chrome&apos;s on-device AI
+            (Gemini Nano) &mdash; nothing is sent to any server.
           </p>
         </section>
 
@@ -130,9 +131,9 @@ export default function PrivacyPage() {
           </h2>
           <p>
             Nothing is stored. No accounts, no cookies, no tracking. The
-            aggregated summary exists in server memory only during the analysis
-            call and is discarded immediately after. We don&apos;t even know
-            you were here.
+            aggregated summary exists in your browser&apos;s memory only during
+            the analysis and is discarded as soon as the tab closes. We
+            don&apos;t even know you were here.
           </p>
         </section>
       </div>
