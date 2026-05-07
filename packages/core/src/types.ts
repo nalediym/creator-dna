@@ -111,7 +111,6 @@ export interface Niche {
   // downstream prompts (qualification, content ideas) can run from this
   // alone, without re-reading the raw aggregator summary.
   stats?: string[];
-  creatorExamples?: string[];
 }
 
 export interface QualificationResponse {

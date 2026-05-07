@@ -21,13 +21,12 @@ import type { CreatorDNASummary, Niche } from "./types";
 export const nicheSchema = z.object({
   niches: z.array(
     z.object({
-      name: z.string().max(120),
+      name: z.string().max(100),
       confidence: z.number().min(0).max(100),
-      evidence: z.array(z.string().max(140)).min(1).max(3),
-      stats: z.array(z.string().max(80)).min(1).max(3),
-      creatorExamples: z.array(z.string().max(40)).max(3),
+      evidence: z.array(z.string().max(120)).min(1).max(2),
+      stats: z.array(z.string().max(70)).min(1).max(2),
     }),
-  ).min(1).max(3),
+  ).min(1).max(2),
 });
 
 export const qualificationSchema = z.object({
@@ -69,14 +68,13 @@ ${topSearches.map((s) => `  "${s.term}" (${s.count}x)`).join("\n")}
 CREATORS FOLLOWED BY CATEGORY:
 ${categories.map((c) => `  ${c.category}: ${c.count}${c.sampleUsernames.length ? ` (e.g. ${c.sampleUsernames.slice(0, 2).join(", ")})` : ""}`).join("\n")}
 
-Identify up to 3 SPECIFIC niche intersections (not broad categories — "4C natural hair + occasion styling," not "beauty"). Look for where two or more interest areas overlap.
+Identify the TOP 1-2 SPECIFIC niche intersections (not broad categories — "4C natural hair + occasion styling," not "beauty"). Look for where two or more interest areas overlap. Quality over quantity — better to return 1 strong niche than 2 weak ones.
 
-For each niche, populate ALL fields:
-- name: specific intersection
+For each niche, populate ALL fields with terse, specific values:
+- name: short, specific intersection (under 100 chars)
 - confidence: 0-100 (search frequency × engagement depth × specificity)
-- evidence: 2-3 short observations about their behavior in this niche
-- stats: 2-3 concrete data points like "cecred searched 8x" or "19 hair-care creators followed" — these get reused in later prompts so they must be self-contained
-- creatorExamples: up to 3 follower handles or category labels associated with this niche`;
+- evidence: 2 short observations (under 120 chars each)
+- stats: 2 concrete data points like "cecred searched 8x" or "19 hair-care creators followed" — these get reused in later prompts, so they must be self-contained`;
 }
 
 export function buildQualificationPrompt(niches: Niche[]): string {
