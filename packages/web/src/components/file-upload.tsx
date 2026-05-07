@@ -4,6 +4,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { unzipSync } from "fflate";
 import { isLocalAIAvailable, analyzeLocally } from "@/lib/local-ai";
+import {
+  trackUploadStarted,
+  trackAnalysisStarted,
+} from "@/lib/track";
 import type { ParseWorkerResult, ParseWorkerError } from "@/workers/parse-worker";
 
 // Pattern that matches TikTok's data-export filenames as they ship from
@@ -65,6 +69,7 @@ export function FileUpload() {
       }
 
       setState({ status: "parsing", fileName: file.name });
+      const parseSourceStart = performance.now();
 
       try {
         let text: string;
@@ -88,6 +93,8 @@ export function FileUpload() {
         } else {
           text = await file.text();
         }
+
+        trackUploadStarted(performance.now() - parseSourceStart);
 
         // Parse in Web Worker to avoid blocking the main thread
         const worker = new Worker(
@@ -121,6 +128,8 @@ export function FileUpload() {
             }
 
             console.log("[Creator DNA] Using local AI (Gemini Nano) — fully on-device");
+            const summaryBytes = JSON.stringify(result.summary).length;
+            trackAnalysisStarted(summaryBytes);
             const analysis = await analyzeLocally(result.summary);
 
             if (!analysis?.niches) {

@@ -20,6 +20,7 @@ import { ErrorBanner } from "@/components/report/error-banner";
 import { ShareCard } from "@/components/report/share-card";
 import { ReportFooter } from "@/components/report/report-footer";
 import { ProgressDots } from "@/components/report/progress-dots";
+import { trackReportRendered } from "@/lib/track";
 
 interface StoredReport {
   niches: NicheResponse | null;
@@ -58,7 +59,10 @@ export default function ReportPage() {
   }, [router]);
 
   useEffect(() => {
-    if (report) document.title = "Your Creator DNA Report";
+    if (report) {
+      document.title = "Your Creator DNA Report";
+      trackReportRendered();
+    }
   }, [report]);
 
   if (!report) {
