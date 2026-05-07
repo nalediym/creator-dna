@@ -115,7 +115,7 @@ export function FileUpload() {
               setState({
                 status: "error",
                 message:
-                  "Creator DNA needs Chrome's on-device AI (Gemini Nano) — Chrome 127+ with the Prompt API enabled. We made this choice on purpose: nothing about your TikTok export ever leaves your laptop, including the aggregated summary. Open this site in Chrome with chrome://flags/#prompt-api-for-gemini-nano enabled, or come back from a Chrome 127+ install.",
+                  "On-device AI became unavailable mid-flow. Refresh the page — the homepage will walk you through fixing it.",
               });
               return;
             }

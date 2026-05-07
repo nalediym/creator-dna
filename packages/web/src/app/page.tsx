@@ -1,4 +1,5 @@
 import { FileUpload } from "@/components/file-upload";
+import { NanoGate } from "@/components/nano-status";
 import Link from "next/link";
 
 export default function Home() {
@@ -27,7 +28,9 @@ export default function Home() {
           already are.
         </p>
 
-        <FileUpload />
+        <NanoGate>
+          <FileUpload />
+        </NanoGate>
 
         <div className="flex items-center justify-center gap-2 mt-6 text-[13px] text-text-faint">
           <span className="w-[6px] h-[6px] rounded-full bg-success" />
