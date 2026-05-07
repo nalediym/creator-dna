@@ -22,6 +22,8 @@ interface RunStep {
   parsed: unknown;
   parseError: string | null;
   ms: number;
+  inputUsage?: number;
+  inputQuota?: number;
 }
 
 type Status = "idle" | "loading-summary" | "running" | "done" | "error";
@@ -35,6 +37,8 @@ interface LMSession {
     options?: { responseConstraint?: object },
   ): Promise<string>;
   destroy(): void;
+  inputUsage?: number;
+  inputQuota?: number;
 }
 interface LMOptions {
   systemPrompt?: string;
@@ -106,7 +110,16 @@ export default function TestNanoPage() {
         } catch (e) {
           parseError = e instanceof Error ? e.message : String(e);
         }
-        return { label, promptText, rawResponse: raw, parsed, parseError, ms };
+        return {
+          label,
+          promptText,
+          rawResponse: raw,
+          parsed,
+          parseError,
+          ms,
+          inputUsage: session.inputUsage,
+          inputQuota: session.inputQuota,
+        };
       } finally {
         session.destroy();
       }
@@ -146,12 +159,12 @@ export default function TestNanoPage() {
       const [qual, ideas] = await Promise.all([
         runOne(
           "2. Qualification",
-          buildQualificationPrompt(summary, parsedNiches),
+          buildQualificationPrompt(parsedNiches),
           qualificationJsonSchema,
         ),
         runOne(
           "3. Content ideas",
-          buildContentGapPrompt(summary, parsedNiches),
+          buildContentGapPrompt(parsedNiches),
           contentIdeasJsonSchema,
         ),
       ]);
@@ -283,6 +296,9 @@ function StepView({ step }: { step: RunStep }) {
         <span className="text-text-primary font-medium">{step.label}</span>
         <span className="text-[11px] font-[family-name:var(--font-data)] text-text-faint">
           {Math.round(step.ms)}ms · {step.rawResponse.length}c
+          {step.inputUsage != null && step.inputQuota != null && (
+            <> · in {step.inputUsage}/{step.inputQuota} tok</>
+          )}
           {step.parseError && (
             <span className="text-destructive ml-2">parse-fail</span>
           )}

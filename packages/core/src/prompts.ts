@@ -13,119 +13,109 @@ import type { CreatorDNASummary, Niche } from "./types";
 
 // ── Zod Schemas (runtime validation of Claude responses) ────
 
+// Schemas are kept lean: descriptions are stripped (they bloat the JSON Schema
+// sent to small models via responseConstraint), and array/string bounds are
+// explicit so the model can't run away. Each niche carries enough self-contained
+// context that downstream prompts (qualification, content ideas) can run from
+// just the niche objects — no need to re-send the raw summary.
 export const nicheSchema = z.object({
   niches: z.array(
     z.object({
-      name: z.string().describe("Specific niche intersection name, e.g. '4C Natural Hair Care + Product Formulation'"),
-      confidence: z.number().min(0).max(100).describe("Confidence score 0-100 based on depth of engagement"),
-      evidence: z.array(z.string()).describe("2-4 specific evidence points from the data"),
+      name: z.string().max(100),
+      confidence: z.number().min(0).max(100),
+      evidence: z.array(z.string().max(120)).min(1).max(2),
+      stats: z.array(z.string().max(70)).min(1).max(2),
     }),
-  ).min(1).max(5),
+  ).min(1).max(2),
 });
 
 export const qualificationSchema = z.object({
   qualifications: z.array(
     z.object({
-      niche: z.string().describe("Which niche this qualification is for"),
-      narrative: z.string().describe("A confidence-building paragraph using specific numbers. Write as if you're a mentor who believes in this person."),
-      stats: z.array(z.string()).describe("2-3 specific data points that prove expertise, e.g. '77 searches on Cecred'"),
+      niche: z.string().max(120),
+      narrative: z.string().max(600),
+      stats: z.array(z.string().max(80)).min(1).max(3),
     }),
-  ),
+  ).min(1).max(3),
 });
 
 export const contentIdeasSchema = z.object({
   ideas: z.array(
     z.object({
-      title: z.string().describe("Video title — specific, not generic"),
-      hook: z.string().describe("Opening line the creator can literally read into a camera"),
-      format: z.string().describe("Format + duration, e.g. 'Tutorial · 60-90s'"),
-      niche: z.string().describe("Which niche intersection this targets"),
+      title: z.string().max(80),
+      hook: z.string().max(200),
+      format: z.string().max(60),
+      niche: z.string().max(120),
     }),
-  ).min(5).max(10),
+  ).min(5).max(8),
 });
 
 // ── Prompt Builders ─────────────────────────────────────────
 
 export function buildClusteringPrompt(summary: CreatorDNASummary): string {
-  const topSearches = summary.searchClusters.slice(0, 40);
-  const categories = summary.creatorCategories.slice(0, 15);
+  // Cap input aggressively — the schema constraints downstream want richer
+  // per-niche output, so we trade input breadth for output depth.
+  const topSearches = summary.searchClusters.slice(0, 25);
+  const categories = summary.creatorCategories.slice(0, 10);
 
-  return `You are analyzing a TikTok user's consumption data to identify their genuine content niches.
+  return `Analyze a TikTok user's consumption to identify their content niches.
 
-This person watched ${summary.stats.videosWatched.toLocaleString()} videos, liked ${summary.stats.videosLiked.toLocaleString()}, favorited ${summary.stats.videosFavorited.toLocaleString()}, and made ${summary.stats.searchesCount.toLocaleString()} searches over the period ${summary.stats.dateRange.start} to ${summary.stats.dateRange.end}.
+Stats: ${summary.stats.videosWatched.toLocaleString()} watched, ${summary.stats.videosLiked.toLocaleString()} liked, ${summary.stats.videosFavorited.toLocaleString()} favorited, ${summary.stats.searchesCount.toLocaleString()} searches. Like rate ${(summary.likeToWatchRatio * 100).toFixed(0)}%, favorite rate ${(summary.favoriteToLikeRatio * 100).toFixed(0)}%.
 
-Their like-to-watch ratio is ${(summary.likeToWatchRatio * 100).toFixed(1)}%. Their favorite-to-like ratio is ${(summary.favoriteToLikeRatio * 100).toFixed(1)}%.
+TOP SEARCHES:
+${topSearches.map((s) => `  "${s.term}" (${s.count}x)`).join("\n")}
 
-TOP SEARCH TERMS (ranked by frequency):
-${topSearches.map((s) => `  "${s.term}" — searched ${s.count} times (${s.firstSeen} to ${s.lastSeen})`).join("\n")}
+CREATORS FOLLOWED BY CATEGORY:
+${categories.map((c) => `  ${c.category}: ${c.count}${c.sampleUsernames.length ? ` (e.g. ${c.sampleUsernames.slice(0, 2).join(", ")})` : ""}`).join("\n")}
 
-CREATOR CATEGORIES FOLLOWED:
-${categories.map((c) => `  ${c.category}: ${c.count} creators (e.g. ${c.sampleUsernames.join(", ")})`).join("\n")}
+Identify the TOP 1-2 SPECIFIC niche intersections (not broad categories — "4C natural hair + occasion styling," not "beauty"). Look for where two or more interest areas overlap. Quality over quantity — better to return 1 strong niche than 2 weak ones.
 
-Identify 3-5 SPECIFIC niche intersections. Not broad categories like "beauty" — specific intersections like "4C natural hair care + DIY product formulation" or "bakhoor fragrance culture + artisanal scent making."
-
-Rank by confidence: search frequency × engagement depth × specificity. A niche with 77 specific searches scores higher than one with 200 generic watches.
-
-Look for INTERSECTIONS — where two or more interest areas overlap is where this person's unique positioning lives.`;
+For each niche, populate ALL fields with terse, specific values:
+- name: short, specific intersection (under 100 chars)
+- confidence: 0-100 (search frequency × engagement depth × specificity)
+- evidence: 2 short observations (under 120 chars each)
+- stats: 2 concrete data points like "cecred searched 8x" or "19 hair-care creators followed" — these get reused in later prompts, so they must be self-contained`;
 }
 
-export function buildQualificationPrompt(
-  summary: CreatorDNASummary,
-  niches: Niche[],
-): string {
-  const nicheList = niches
-    .map((n) => `  - ${n.name} (${n.confidence}% confidence)`)
-    .join("\n");
+export function buildQualificationPrompt(niches: Niche[]): string {
+  // RAPTOR / Claude-Code pattern: this prompt sees ONLY the distilled niches
+  // from prompt 1, never the raw aggregator summary. Each niche already
+  // carries its own stats array — that's what the narrative cites.
+  return `Write confidence-building qualification evidence for an aspiring TikTok creator who has never posted.
 
-  return `You are writing confidence-building qualification evidence for an aspiring TikTok creator.
-
-This person has NEVER posted content. They have ${summary.stats.videosWatched.toLocaleString()} videos watched, ${summary.stats.videosLiked.toLocaleString()} liked, ${summary.stats.videosFavorited.toLocaleString()} favorited, and ${summary.stats.searchesCount.toLocaleString()} searches.
-
-Their identified niches are:
-${nicheList}
+Their niches (each comes with stats you should weave into the narrative):
+${niches
+  .map(
+    (n) =>
+      `\n- ${n.name} (${n.confidence}% confidence)\n  evidence: ${n.evidence.join("; ")}\n  stats: ${n.stats?.join("; ") ?? ""}`,
+  )
+  .join("\n")}
 
 For each niche, write a qualification narrative that:
-1. Uses SPECIFIC numbers from the data (searches, likes, creators followed)
-2. Frames their consumption as expertise ("You didn't just watch 77 videos about this — you researched it")
-3. Compares them favorably to the average person ("Most creators in this space haven't done this much research")
-4. Builds genuine confidence without being cheesy or hollow
+1. Cites the specific stats above as proof of expertise
+2. Frames their consumption as research, not just watching
+3. Builds genuine confidence — mentor voice, not corporate encouragement
 
-The tone is: a mentor who has seen the data and genuinely believes this person knows more than they think. Not corporate encouragement. Real talk backed by real numbers.
-
-Available data:
-- Total videos watched: ${summary.stats.videosWatched.toLocaleString()}
-- Total likes: ${summary.stats.videosLiked.toLocaleString()}
-- Total favorites: ${summary.stats.videosFavorited.toLocaleString()}
-- Total searches: ${summary.stats.searchesCount.toLocaleString()}
-- Accounts followed: ${summary.stats.accountsFollowed.toLocaleString()}
-- Top search terms: ${summary.searchClusters.slice(0, 20).map((s) => `"${s.term}" (${s.count}x)`).join(", ")}`;
+The "stats" array in your output should restate 2-3 of the supplied stats verbatim or near-verbatim (so the UI can render them as evidence chips).`;
 }
 
-export function buildContentGapPrompt(
-  summary: CreatorDNASummary,
-  niches: Niche[],
-): string {
-  const nicheList = niches.map((n) => n.name).join(", ");
-  const topSearches = summary.searchClusters.slice(0, 30);
+export function buildContentGapPrompt(niches: Niche[]): string {
+  // Same RAPTOR pattern — only niches, no raw summary.
+  return `Generate 5-8 specific TikTok video ideas for a new creator whose identified niches are:
+${niches
+  .map(
+    (n) =>
+      `\n- ${n.name}\n  evidence: ${n.evidence.join("; ")}\n  stats: ${n.stats?.join("; ") ?? ""}`,
+  )
+  .join("\n")}
 
-  return `You are identifying content gaps for an aspiring TikTok creator.
+Each idea must:
+1. Sit at the INTERSECTION of two or more of their niches
+2. Be motivated by something in the evidence/stats above (use the specifics — searches, creators, ratios)
+3. Have a hook that's a complete opening sentence the creator could literally say to a camera
+4. Specify a format + duration ("Talking to camera · 45-60s", "Split-screen demo · 60-90s")
 
-Their niche intersections are: ${nicheList}
+Order from EASIEST to most ambitious: idea 1 is talking to camera under 60s, no production. Each subsequent idea can be slightly more ambitious.
 
-Their top search terms (what they actively looked for):
-${topSearches.map((s) => `  "${s.term}" — ${s.count} searches`).join("\n")}
-
-Generate 10 specific video ideas that:
-1. Sit at the INTERSECTION of their niches (not just one niche)
-2. Address things they searched for repeatedly (high-frequency search terms = unmet demand)
-3. Would be unique — content that doesn't exist yet at these intersections
-4. Have specific, compelling hooks they can literally read into a camera
-5. Include a format and approximate duration
-
-For each idea, the hook should be a complete opening sentence. Not "talk about X" but the actual words: "I've been testing [specific thing] for 3 months and here's what nobody tells you..."
-
-Make Video 1 the EASIEST win — low production value, just talking to camera, under 60 seconds. Each subsequent video can be slightly more ambitious.
-
-The first 5 are "Your First 5 Videos" — ordered from easiest to most ambitious.
-The remaining 5 are bonus ideas for week 2+.`;
+The first 5 are "Your First 5 Videos." Any extras (up to 8 total) are bonus ideas for week 2+.`;
 }

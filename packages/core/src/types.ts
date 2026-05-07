@@ -107,6 +107,10 @@ export interface Niche {
   name: string;
   confidence: number;
   evidence: string[];
+  // RAPTOR-style: each niche carries enough self-contained context that
+  // downstream prompts (qualification, content ideas) can run from this
+  // alone, without re-reading the raw aggregator summary.
+  stats?: string[];
 }
 
 export interface QualificationResponse {

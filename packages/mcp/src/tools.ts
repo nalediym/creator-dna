@@ -130,9 +130,9 @@ export function getAnalysisPrompts(args: z.infer<typeof getAnalysisPromptsInput>
   // Stage 2: qualification + content-ideas (run in parallel)
   return {
     stage: 'qualification_and_ideas' as const,
-    qualification_prompt: buildQualificationPrompt(summary, args.niches as Niche[]),
+    qualification_prompt: buildQualificationPrompt(args.niches as Niche[]),
     qualification_schema: qualificationSchemaJson(),
-    content_ideas_prompt: buildContentGapPrompt(summary, args.niches as Niche[]),
+    content_ideas_prompt: buildContentGapPrompt(args.niches as Niche[]),
     content_ideas_schema: contentIdeasSchemaJson(),
     next_step:
       'Run both prompts in parallel with your LLM. Validate each response with validate_analysis (schemas: "qualification" and "content_ideas"). Combine all four pieces (niches, qualifications, content ideas, schedule) into the final report.',

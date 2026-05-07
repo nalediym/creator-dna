@@ -7,6 +7,10 @@
  * system prompt, and tends to be faster (no wasted tokens on preamble).
  */
 
+// Tightened May 2026 after Chrome reported "response exceeded output limits"
+// on 3-niche × (3 evidence + 3 stats + 3 creators) outputs. Chrome's per-prompt
+// output cap appears to be ~1000 tokens (~3400 chars). At 2 niches × 2+2 items
+// each, total worst-case output is ~600 tokens — well within budget.
 export const nicheJsonSchema = {
   type: "object",
   required: ["niches"],
@@ -14,18 +18,24 @@ export const nicheJsonSchema = {
     niches: {
       type: "array",
       minItems: 1,
-      maxItems: 5,
+      maxItems: 2,
       items: {
         type: "object",
-        required: ["name", "confidence", "evidence"],
+        required: ["name", "confidence", "evidence", "stats"],
         properties: {
-          name: { type: "string" },
+          name: { type: "string", maxLength: 100 },
           confidence: { type: "number", minimum: 0, maximum: 100 },
           evidence: {
             type: "array",
             minItems: 1,
-            maxItems: 4,
-            items: { type: "string" },
+            maxItems: 2,
+            items: { type: "string", maxLength: 120 },
+          },
+          stats: {
+            type: "array",
+            minItems: 1,
+            maxItems: 2,
+            items: { type: "string", maxLength: 70 },
           },
         },
       },
@@ -40,17 +50,18 @@ export const qualificationJsonSchema = {
     qualifications: {
       type: "array",
       minItems: 1,
+      maxItems: 3,
       items: {
         type: "object",
         required: ["niche", "narrative", "stats"],
         properties: {
-          niche: { type: "string" },
-          narrative: { type: "string" },
+          niche: { type: "string", maxLength: 120 },
+          narrative: { type: "string", maxLength: 600 },
           stats: {
             type: "array",
             minItems: 1,
             maxItems: 3,
-            items: { type: "string" },
+            items: { type: "string", maxLength: 80 },
           },
         },
       },
@@ -65,15 +76,15 @@ export const contentIdeasJsonSchema = {
     ideas: {
       type: "array",
       minItems: 5,
-      maxItems: 10,
+      maxItems: 8,
       items: {
         type: "object",
         required: ["title", "hook", "format", "niche"],
         properties: {
-          title: { type: "string" },
-          hook: { type: "string" },
-          format: { type: "string" },
-          niche: { type: "string" },
+          title: { type: "string", maxLength: 80 },
+          hook: { type: "string", maxLength: 200 },
+          format: { type: "string", maxLength: 60 },
+          niche: { type: "string", maxLength: 120 },
         },
       },
     },
