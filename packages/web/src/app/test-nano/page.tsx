@@ -146,12 +146,12 @@ export default function TestNanoPage() {
       const [qual, ideas] = await Promise.all([
         runOne(
           "2. Qualification",
-          buildQualificationPrompt(summary, parsedNiches),
+          buildQualificationPrompt(parsedNiches),
           qualificationJsonSchema,
         ),
         runOne(
           "3. Content ideas",
-          buildContentGapPrompt(summary, parsedNiches),
+          buildContentGapPrompt(parsedNiches),
           contentIdeasJsonSchema,
         ),
       ]);

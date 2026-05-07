@@ -122,14 +122,15 @@ export async function analyzeLocally(
     };
   }
 
-  // Step 2: Qualification + Content Gaps (parallel, using niches)
+  // Step 2: Qualification + Content Gaps (parallel) — RAPTOR-shaped: each
+  // takes only the distilled niches from step 1, never the raw summary.
   const [qualification, contentIdeas] = await Promise.all([
     runLocalPrompt<QualificationResponse>(
-      buildQualificationPrompt(summary, niches.niches),
+      buildQualificationPrompt(niches.niches),
       qualificationJsonSchema,
     ),
     runLocalPrompt<ContentIdeasResponse>(
-      buildContentGapPrompt(summary, niches.niches),
+      buildContentGapPrompt(niches.niches),
       contentIdeasJsonSchema,
     ),
   ]);

@@ -133,10 +133,10 @@ let qualification: QualificationResponse | null = null;
 let contentIdeas: ContentIdeasResponse | null = null;
 
 if (niches?.niches) {
-  const qualJson = runPrompt("qualification", buildQualificationPrompt(summary, niches.niches), qualSchema);
+  const qualJson = runPrompt("qualification", buildQualificationPrompt(niches.niches), qualSchema);
   try { qualification = JSON.parse(qualJson); } catch { /* skip */ }
 
-  const ideasJson = runPrompt("content-gaps", buildContentGapPrompt(summary, niches.niches), ideasSchema);
+  const ideasJson = runPrompt("content-gaps", buildContentGapPrompt(niches.niches), ideasSchema);
   try { contentIdeas = JSON.parse(ideasJson); } catch { /* skip */ }
 }
 

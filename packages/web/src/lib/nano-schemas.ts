@@ -14,18 +14,29 @@ export const nicheJsonSchema = {
     niches: {
       type: "array",
       minItems: 1,
-      maxItems: 5,
+      maxItems: 3,
       items: {
         type: "object",
-        required: ["name", "confidence", "evidence"],
+        required: ["name", "confidence", "evidence", "stats"],
         properties: {
-          name: { type: "string" },
+          name: { type: "string", maxLength: 120 },
           confidence: { type: "number", minimum: 0, maximum: 100 },
           evidence: {
             type: "array",
             minItems: 1,
-            maxItems: 4,
-            items: { type: "string" },
+            maxItems: 3,
+            items: { type: "string", maxLength: 140 },
+          },
+          stats: {
+            type: "array",
+            minItems: 1,
+            maxItems: 3,
+            items: { type: "string", maxLength: 80 },
+          },
+          creatorExamples: {
+            type: "array",
+            maxItems: 3,
+            items: { type: "string", maxLength: 40 },
           },
         },
       },
@@ -40,17 +51,18 @@ export const qualificationJsonSchema = {
     qualifications: {
       type: "array",
       minItems: 1,
+      maxItems: 3,
       items: {
         type: "object",
         required: ["niche", "narrative", "stats"],
         properties: {
-          niche: { type: "string" },
-          narrative: { type: "string" },
+          niche: { type: "string", maxLength: 120 },
+          narrative: { type: "string", maxLength: 600 },
           stats: {
             type: "array",
             minItems: 1,
             maxItems: 3,
-            items: { type: "string" },
+            items: { type: "string", maxLength: 80 },
           },
         },
       },
@@ -65,15 +77,15 @@ export const contentIdeasJsonSchema = {
     ideas: {
       type: "array",
       minItems: 5,
-      maxItems: 10,
+      maxItems: 8,
       items: {
         type: "object",
         required: ["title", "hook", "format", "niche"],
         properties: {
-          title: { type: "string" },
-          hook: { type: "string" },
-          format: { type: "string" },
-          niche: { type: "string" },
+          title: { type: "string", maxLength: 80 },
+          hook: { type: "string", maxLength: 200 },
+          format: { type: "string", maxLength: 60 },
+          niche: { type: "string", maxLength: 120 },
         },
       },
     },
