@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { unzipSync } from "fflate";
 import { isLocalAIAvailable, analyzeLocally } from "@/lib/local-ai";
@@ -8,49 +8,17 @@ import {
 } from "@/lib/track";
 import type { ParseWorkerResult, ParseWorkerError } from "@/workers/parse-worker";
 
-// Pattern that matches TikTok's data-export filenames as they ship from
-// the takeout flow. Both the zipped and unzipped variants land in Downloads.
-const TIKTOK_EXPORT_PATTERN = /^(user_data_tiktok.*\.json|tiktok.*\.zip)$/i;
-
 type UploadState =
   | { status: "idle" }
   | { status: "parsing"; fileName: string }
   | { status: "analyzing" }
-  | { status: "watching"; folderName: string }
   | { status: "error"; message: string };
-
-// File System Access API is Chrome/Edge only. Window typing for it is in
-// the Web Platform spec but not in lib.dom.d.ts; declare just enough.
-declare global {
-  interface Window {
-    showDirectoryPicker?: (opts?: {
-      id?: string;
-      mode?: "read" | "readwrite";
-      startIn?: "downloads" | "documents" | "desktop";
-    }) => Promise<FileSystemDirectoryHandle>;
-  }
-  // The async-iterator methods on FileSystemDirectoryHandle are in the spec
-  // but not yet in lib.dom.d.ts (as of TS 5.7). Declare the one we use.
-  interface FileSystemDirectoryHandle {
-    values(): AsyncIterableIterator<FileSystemHandle>;
-  }
-}
 
 export function FileUpload() {
   const [state, setState] = useState<UploadState>({ status: "idle" });
   const inputRef = useRef<HTMLInputElement>(null);
   const dropZoneRef = useRef<HTMLDivElement>(null);
-  const watchHandleRef = useRef<FileSystemDirectoryHandle | null>(null);
-  const watchSeenRef = useRef<Set<string>>(new Set());
-  const watchTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const navigate = useNavigate();
-
-  // Cleanup watch interval on unmount
-  useEffect(() => {
-    return () => {
-      if (watchTimerRef.current) clearInterval(watchTimerRef.current);
-    };
-  }, []);
 
   const processFile = useCallback(
     async (file: File) => {
@@ -196,115 +164,6 @@ export function FileUpload() {
     dropZoneRef.current?.classList.remove("border-accent", "bg-accent-glow");
   }, []);
 
-  // Auto-detect via File System Access API. Chrome/Edge only; gracefully
-  // surfaces a hint on other browsers.
-  const handleAutoDetect = useCallback(async () => {
-    if (!window.showDirectoryPicker) {
-      setState({
-        status: "error",
-        message:
-          "Auto-detect needs the File System Access API (Chrome 86+ or Edge). On other browsers, drag your TikTok export onto the box above instead.",
-      });
-      return;
-    }
-
-    let dirHandle: FileSystemDirectoryHandle;
-    try {
-      dirHandle = await window.showDirectoryPicker({
-        id: "creator-dna-downloads",
-        mode: "read",
-        startIn: "downloads",
-      });
-    } catch (err) {
-      if (err instanceof Error && err.name === "AbortError") return; // user canceled
-      setState({
-        status: "error",
-        message:
-          err instanceof Error
-            ? `Could not access folder: ${err.message}`
-            : "Could not access folder.",
-      });
-      return;
-    }
-
-    watchHandleRef.current = dirHandle;
-    watchSeenRef.current = new Set();
-    setState({ status: "watching", folderName: dirHandle.name });
-
-    // First scan + register existing files as already-seen so we only act
-    // on NEW arrivals after this point. Exception: if a TikTok export is
-    // already there, process it immediately.
-    const found = await scanForTikTokExport(dirHandle, /* registerOnly */ false);
-    if (found) return;
-
-    // No match yet, mark everything as seen and start polling for new arrivals.
-    for await (const entry of dirHandle.values()) {
-      if (entry.kind === "file") watchSeenRef.current.add(entry.name);
-    }
-
-    if (watchTimerRef.current) clearInterval(watchTimerRef.current);
-    watchTimerRef.current = setInterval(() => {
-      if (!watchHandleRef.current) return;
-      void scanForTikTokExport(watchHandleRef.current, false);
-    }, 5000);
-  }, []);
-
-  // Scan a directory for a TikTok-shaped export and process the first match.
-  // `registerOnly` when true means: don't process anything, just record names
-  // as already-seen (used to debounce the polling loop).
-  const scanForTikTokExport = useCallback(
-    async (dirHandle: FileSystemDirectoryHandle, registerOnly: boolean) => {
-      try {
-        for await (const entry of dirHandle.values()) {
-          if (entry.kind !== "file") continue;
-          const name = entry.name;
-          if (registerOnly) {
-            watchSeenRef.current.add(name);
-            continue;
-          }
-          if (watchSeenRef.current.has(name)) continue;
-          if (!TIKTOK_EXPORT_PATTERN.test(name)) continue;
-
-          // New TikTok-shaped file — process and stop watching.
-          if (watchTimerRef.current) {
-            clearInterval(watchTimerRef.current);
-            watchTimerRef.current = null;
-          }
-          watchHandleRef.current = null;
-          const file = await (entry as FileSystemFileHandle).getFile();
-          await processFile(file);
-          return true;
-        }
-      } catch (err) {
-        // Folder permission revoked, etc.
-        if (watchTimerRef.current) {
-          clearInterval(watchTimerRef.current);
-          watchTimerRef.current = null;
-        }
-        watchHandleRef.current = null;
-        setState({
-          status: "error",
-          message:
-            err instanceof Error
-              ? `Lost folder access: ${err.message}`
-              : "Lost folder access.",
-        });
-      }
-      return false;
-    },
-    [processFile],
-  );
-
-  const stopWatching = useCallback(() => {
-    if (watchTimerRef.current) {
-      clearInterval(watchTimerRef.current);
-      watchTimerRef.current = null;
-    }
-    watchHandleRef.current = null;
-    watchSeenRef.current = new Set();
-    setState({ status: "idle" });
-  }, []);
-
   if (state.status === "parsing") {
     return (
       <div className="border-2 border-dashed border-border rounded-[16px] p-12 max-w-[500px] w-full mx-auto text-center">
@@ -327,28 +186,6 @@ export function FileUpload() {
         <div className="text-[13px] text-text-faint">
           Running on-device AI. Nothing leaves your browser.
         </div>
-      </div>
-    );
-  }
-
-  if (state.status === "watching") {
-    return (
-      <div className="border-2 border-dashed border-accent rounded-[16px] p-12 max-w-[500px] w-full mx-auto text-center">
-        <div className="text-text-secondary mb-2">
-          Watching{" "}
-          <span className="text-accent font-medium">{state.folderName}</span>
-          ...
-        </div>
-        <div className="text-[13px] text-text-faint mb-4">
-          When your TikTok export lands here, we&rsquo;ll pick it up automatically.
-          Nothing leaves your browser.
-        </div>
-        <button
-          onClick={stopWatching}
-          className="text-[12px] text-text-faint underline hover:text-accent"
-        >
-          stop watching
-        </button>
       </div>
     );
   }
@@ -395,17 +232,6 @@ export function FileUpload() {
           if (file) processFile(file);
         }}
       />
-
-      <div className="mt-3 text-center text-[13px] text-text-faint">
-        or{" "}
-        <button
-          onClick={handleAutoDetect}
-          className="text-accent underline hover:no-underline"
-        >
-          auto-watch your Downloads folder &rarr;
-        </button>
-        <span className="ml-1 text-text-faint">(Chrome &amp; Edge)</span>
-      </div>
 
       {state.status === "error" && (
         <div className="mt-4 p-4 rounded-lg bg-[rgba(212,102,90,0.1)] border-l-[3px] border-destructive text-destructive text-sm">
