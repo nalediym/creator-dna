@@ -1,7 +1,5 @@
-"use client";
-
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import {
   buildClusteringPrompt,
   buildQualificationPrompt,
@@ -53,7 +51,7 @@ declare const LanguageModel:
     }
   | undefined;
 
-export default function TestNanoPage() {
+export function TestNanoPage() {
   const [summaryJson, setSummaryJson] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
@@ -76,7 +74,9 @@ export default function TestNanoPage() {
       .catch(() => setStatus("idle"));
 
     if (typeof LanguageModel !== "undefined") {
-      LanguageModel.availability().then(setAvailability).catch(() => setAvailability("error"));
+      LanguageModel.availability()
+        .then(setAvailability)
+        .catch(() => setAvailability("error"));
     } else {
       setAvailability("LanguageModel undefined");
     }
@@ -179,7 +179,7 @@ export default function TestNanoPage() {
   return (
     <main className="max-w-[1100px] mx-auto px-6 py-12">
       <Link
-        href="/"
+        to="/"
         className="inline-flex items-center text-sm text-text-faint hover:text-accent mb-6"
       >
         &larr; Back
@@ -297,7 +297,10 @@ function StepView({ step }: { step: RunStep }) {
         <span className="text-[11px] font-[family-name:var(--font-data)] text-text-faint">
           {Math.round(step.ms)}ms · {step.rawResponse.length}c
           {step.inputUsage != null && step.inputQuota != null && (
-            <> · in {step.inputUsage}/{step.inputQuota} tok</>
+            <>
+              {" "}
+              · in {step.inputUsage}/{step.inputQuota} tok
+            </>
           )}
           {step.parseError && (
             <span className="text-destructive ml-2">parse-fail</span>
@@ -326,7 +329,11 @@ function StepView({ step }: { step: RunStep }) {
             </pre>
 
             <div className="text-[11px] text-text-faint mb-1">
-              Parsed JSON {step.parseError && <span className="text-destructive">— {step.parseError}</span>}:
+              Parsed JSON{" "}
+              {step.parseError && (
+                <span className="text-destructive">— {step.parseError}</span>
+              )}
+              :
             </div>
             <pre className="text-[11px] font-[family-name:var(--font-data)] text-text-primary whitespace-pre-wrap overflow-x-auto max-h-[400px]">
               {step.parsed ? JSON.stringify(step.parsed, null, 2) : "(none)"}

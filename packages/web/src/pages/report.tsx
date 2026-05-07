@@ -1,9 +1,6 @@
-"use client";
-
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 import type {
-  CreatorDNAReport,
   NicheResponse,
   QualificationResponse,
   ContentIdeasResponse,
@@ -34,9 +31,9 @@ interface StoredReport {
   };
 }
 
-export default function ReportPage() {
+export function ReportPage() {
   const [report, setReport] = useState<StoredReport | null>(null);
-  const router = useRouter();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Try sessionStorage first (from live upload flow)
@@ -45,7 +42,9 @@ export default function ReportPage() {
       try {
         setReport(JSON.parse(stored));
         return;
-      } catch { /* fall through */ }
+      } catch {
+        /* fall through */
+      }
     }
 
     // Fallback: load pre-generated sample report (from CLI)
@@ -55,8 +54,8 @@ export default function ReportPage() {
         return res.json();
       })
       .then(setReport)
-      .catch(() => router.push("/"));
-  }, [router]);
+      .catch(() => navigate("/"));
+  }, [navigate]);
 
   useEffect(() => {
     if (report) {

@@ -1,8 +1,8 @@
+import { Link } from "react-router-dom";
 import { FileUpload } from "@/components/file-upload";
 import { NanoGate } from "@/components/nano-status";
-import Link from "next/link";
 
-export default function Home() {
+export function HomePage() {
   return (
     <main className="flex-1 flex flex-col items-center justify-center px-6 py-16 relative">
       {/* Warm radial glow behind the hero */}
@@ -35,7 +35,7 @@ export default function Home() {
         <div className="flex items-center justify-center gap-2 mt-6 text-[13px] text-text-faint">
           <span className="w-[6px] h-[6px] rounded-full bg-success" />
           Your data never leaves your browser.
-          <Link href="/privacy" className="text-accent underline ml-1">
+          <Link to="/privacy" className="text-accent underline ml-1">
             See for yourself&nbsp;&rarr;
           </Link>
         </div>

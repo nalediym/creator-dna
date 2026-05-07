@@ -1,7 +1,5 @@
-"use client";
-
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 import { unzipSync } from "fflate";
 import { isLocalAIAvailable, analyzeLocally } from "@/lib/local-ai";
 import {
@@ -45,7 +43,7 @@ export function FileUpload() {
   const watchHandleRef = useRef<FileSystemDirectoryHandle | null>(null);
   const watchSeenRef = useRef<Set<string>>(new Set());
   const watchTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const router = useRouter();
+  const navigate = useNavigate();
 
   // Cleanup watch interval on unmount
   useEffect(() => {
@@ -151,7 +149,7 @@ export function FileUpload() {
               }),
             );
 
-            router.push("/report");
+            navigate("/report");
           } catch {
             setState({
               status: "error",
@@ -176,7 +174,7 @@ export function FileUpload() {
         });
       }
     },
-    [router],
+    [navigate],
   );
 
   const handleDrop = useCallback(
