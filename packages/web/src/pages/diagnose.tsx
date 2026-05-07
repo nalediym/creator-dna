@@ -1,7 +1,5 @@
-"use client";
-
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import {
   diagnoseLocalAI,
   browserLabel,
@@ -10,7 +8,7 @@ import {
 } from "@/lib/diagnose";
 import { NanoDownloadButton } from "@/components/nano-download-button";
 
-export default function DiagnosePage() {
+export function DiagnosePage() {
   const [diag, setDiag] = useState<DiagnoseStatus | null>(null);
   const ua = typeof navigator !== "undefined" ? navigator.userAgent : "";
 
@@ -41,7 +39,7 @@ export default function DiagnosePage() {
   return (
     <main className="max-w-[680px] mx-auto px-6 py-16">
       <Link
-        href="/"
+        to="/"
         className="inline-flex items-center text-sm text-text-faint hover:text-accent mb-8"
       >
         &larr; Back
@@ -76,9 +74,18 @@ export default function DiagnosePage() {
                   : "—"
               }
             />
-            <Row k="CPU cores" v={diag.device.cores != null ? String(diag.device.cores) : "—"} />
-            <Row k="Storage quota" v={formatBytes(diag.device.storageQuotaBytes)} />
-            <Row k="Storage in use" v={formatBytes(diag.device.storageUsageBytes)} />
+            <Row
+              k="CPU cores"
+              v={diag.device.cores != null ? String(diag.device.cores) : "—"}
+            />
+            <Row
+              k="Storage quota"
+              v={formatBytes(diag.device.storageQuotaBytes)}
+            />
+            <Row
+              k="Storage in use"
+              v={formatBytes(diag.device.storageUsageBytes)}
+            />
           </Section>
 
           <Section title="User agent">
@@ -90,7 +97,8 @@ export default function DiagnosePage() {
           <Section title="Next step">
             <p className="text-text-secondary text-sm">{nextStep(diag)}</p>
 
-            {(diag.status === "downloadable" || diag.status === "downloading") && (
+            {(diag.status === "downloadable" ||
+              diag.status === "downloading") && (
               <div className="mt-4">
                 <NanoDownloadButton
                   onReady={run}
@@ -130,7 +138,7 @@ export default function DiagnosePage() {
               Copy report
             </button>
             <Link
-              href="/"
+              to="/"
               className="text-text-faint underline hover:text-accent"
             >
               Back to upload
@@ -142,7 +150,13 @@ export default function DiagnosePage() {
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <section className="mb-8">
       <h2 className="font-[family-name:var(--font-data)] text-[11px] font-medium uppercase tracking-[0.15em] text-accent mb-3">
@@ -192,4 +206,3 @@ function nextStep(d: DiagnoseStatus): string {
       return "Chrome reports the on-device model as unavailable on this device. Most often that means insufficient free disk (~22 GB) or a GPU below ~4 GB.";
   }
 }
-

@@ -1,10 +1,10 @@
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
-export default function PrivacyPage() {
+export function PrivacyPage() {
   return (
     <main className="max-w-[680px] mx-auto px-6 py-16">
       <Link
-        href="/"
+        to="/"
         className="text-accent text-sm hover:text-text-primary transition-colors"
       >
         &larr; Back

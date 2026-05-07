@@ -1,6 +1,4 @@
-"use client";
-
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 export function ReportFooter() {
   return (
@@ -22,7 +20,7 @@ export function ReportFooter() {
           Open TikTok Creator Center
         </a>
         <Link
-          href="/"
+          to="/"
           className="px-6 py-3 border border-border text-text-secondary rounded-lg text-sm hover:border-accent transition-colors"
         >
           Analyze another export

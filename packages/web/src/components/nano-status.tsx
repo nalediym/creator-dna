@@ -1,7 +1,5 @@
-"use client";
-
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import {
   diagnoseLocalAI,
   browserLabel,
@@ -88,10 +86,10 @@ function NanoStatusCard({
         >
           Re-check
         </button>
-        <Link href="/diagnose" className="text-text-faint underline hover:text-accent">
+        <Link to="/diagnose" className="text-text-faint underline hover:text-accent">
           Full diagnostics
         </Link>
-        <Link href="/privacy" className="text-text-faint underline hover:text-accent">
+        <Link to="/privacy" className="text-text-faint underline hover:text-accent">
           Why on-device?
         </Link>
       </div>

@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback, useState } from "react";
 import { startNanoDownload } from "@/lib/local-ai-download";
 
